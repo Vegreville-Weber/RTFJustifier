@@ -1,0 +1,14 @@
+<annuaire> 
+	<personne id="0"> 
+		<nom>weber</nom> 
+		<prenom>come</prenom> 
+		<adresse>123062</adresse> 
+		<information>aime mgk</information>
+	</personne> 
+	<personne id="1"> 
+		<nom>vegreville</nom> 
+		<prenom>bruno</prenom> 
+		<adresse>123044</adresse> 
+		<information>aime les binets</information>
+	</personne> 
+</annuaire>
