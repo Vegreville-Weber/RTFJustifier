@@ -1,0 +1,9 @@
+
+
+1.COMPRENDRE ET IMPLEMENTER LE FONCTIONNEMENT DES PARSER XML:
+	Pages intéressantes : http://java.developpez.com/faq/xml/?page=Generalites#Comment-manipuler-du-XML-avec-Java
+						  puis http://java.developpez.com/faq/xml/?page=SAX#Comment-fonctionne-l-API-SAX
+	2 type de Parsers existe sous Java : DOM et SAX				
+	Il faut qu'on en discute ensemble mais à priori le parser SAX semble moins gourmand et plus approprié à notre projet : à confirmer.
+	
+	Le fichier exempleXML.xml a juste été crée pour comprendre le fonctionnement du parser.
