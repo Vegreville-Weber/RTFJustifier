@@ -14,3 +14,5 @@ Pour accéder aux fichiers xml d'un fichier .odt produit par LibreOffice :
 LE CONTENU SE TROUVE DANS content.xml et LES STYLES UTILISES SE TROUVE DANS styles.xml
 
 Une fois les modifications effectuées, on peut reconstruire le fichier.odt en compressant le nouveau dossier et en le renommant en .odt
+
+http://www.jmdoudoux.fr/java/dej/chap-jdom.htm
