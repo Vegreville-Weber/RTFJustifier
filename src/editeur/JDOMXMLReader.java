@@ -21,19 +21,22 @@ public class JDOMXMLReader {
 		try{
 	
 		SAXBuilder builder = new SAXBuilder();
-		Document document = builder.build(new File("TwoParagraphUnzip/content.xml"));
+		Document document = builder.build(new File("TwoParagraph.xml"));
 		
-		Collection<Element> paragraphes = document.getRootElement() //renvoie tout les paragraphes
-				.getChild("body",Namespace.getNamespace("urn:oasis:names:tc:opendocument:xmlns:office:1.0"))
-				.getChild("text",Namespace.getNamespace("urn:oasis:names:tc:opendocument:xmlns:office:1.0"))
-				.getChildren("p",Namespace.getNamespace("urn:oasis:names:tc:opendocument:xmlns:text:1.0"));
-		
+		Collection<Element> blocs = document.getRootElement() //renvoie tout les paragraphes
+				.getChild("body",Namespace.getNamespace("http://schemas.microsoft.com/office/word/2003/wordml"))
+				.getChildren("p",Namespace.getNamespace("http://schemas.microsoft.com/office/word/2003/wordml"));
+				
+		Collection<Element> paragraphes = new LinkedList<Element>();
 		//afficher(document);
-		for(Element e : paragraphes){
-			System.out.println(e.getText());
+		for(Element e : blocs){
+			paragraphes.add(e.getChild("r",Namespace.getNamespace("http://schemas.microsoft.com/office/word/2003/wordml"))
+				.getChild("t",Namespace.getNamespace("http://schemas.microsoft.com/office/word/2003/wordml")));
 		}
 		
-		
+		for(Element e : paragraphes){
+			System.out.println(e.getText());
+		}		
 		
 		} //gestion des erreurs.
 		catch (JDOMException e){
