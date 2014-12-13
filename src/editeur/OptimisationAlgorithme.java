@@ -21,6 +21,9 @@ public class OptimisationAlgorithme {
 	 */
 	public static String niceParagraph(String paragraphe,double[] largeur,double largeurBloc){
 		String[] chaine = chainesdeMots(paragraphe);
+		double largeurParagraphe = largeurParagraphe(chaine,largeur);
+		if(largeurParagraphe<=largeurBloc) return paragraphe;
+		
 		return null;
 	}
 	
@@ -28,7 +31,7 @@ public class OptimisationAlgorithme {
 	 * @param paragraphe - Paragraphe à traiter
 	 * @return - Renvoie un tableau de String qui correspond à chaque mots présents dans le paragraphe. ATTENTION les espaces comptent comme des mots.
 	 */
-	public static String[] chainesdeMots(String paragraphe){
+	public static String[] chainesdeMotsAvecEspaces(String paragraphe){
 		String[] result = new String[paragraphe.length()];
 		int j =0; boolean isPreviousBlank = true;
 		for(int i = 0;i<paragraphe.length();i++){
@@ -46,6 +49,24 @@ public class OptimisationAlgorithme {
 			}
 			if(result[j]==null) result[j] = new String();
 			result[j]=result[j].concat(Character.toString(temp));			
+		}
+		String[] resultFinal = new String[j+1];
+		for(int k=0;k<resultFinal.length;k++) resultFinal[k]=result[k];
+		return resultFinal;
+	}
+	
+	public static String[] chainesdeMots(String paragraphe){
+		String[] result = new String[paragraphe.length()];
+		int j =0;
+		for(int i = 0;i<paragraphe.length();i++){
+			char temp = paragraphe.charAt(i);
+			if(temp==' '){				
+				j++;								
+			}			
+			else{
+				if(result[j]==null) result[j] = new String();
+				result[j]=result[j].concat(Character.toString(temp));
+				}			
 		}
 		String[] resultFinal = new String[j+1];
 		for(int k=0;k<resultFinal.length;k++) resultFinal[k]=result[k];
