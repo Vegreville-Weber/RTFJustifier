@@ -4,8 +4,8 @@ public class OptimisationAlgorithme {
 
 	public static void main(String[] args) {
 		String p = "aaaaaaa aaaaaaa bbbbbbbb bb ccccc aa bbb aaaaaaa bbcc cccc";
-		char[] cara = new char[500];
-		cara['a']=1;cara['b']=1;cara['c']=1;
+		double[] cara = new double[500];
+		cara['a']=1;cara['b']=1;cara['c']=1;cara[' ']=1;
 		double largeurBloc = 10 ;
 		//System.out.println(niceParagraph(p,cara,largeurBloc));
 		String[] chaine = chainesdeMots(p);
@@ -19,7 +19,7 @@ public class OptimisationAlgorithme {
 	 * @param largeurBloc - Largeur du bloc où on écrit le paragraphe.
 	 * @return - Renvoie le paragraphe mis en page
 	 */
-	public static String niceParagraph(String paragraphe,char[] largeur,double largeurBloc){
+	public static String niceParagraph(String paragraphe,double[] largeur,double largeurBloc){
 		String[] chaine = chainesdeMots(paragraphe);
 		return null;
 	}
@@ -50,6 +50,21 @@ public class OptimisationAlgorithme {
 		String[] resultFinal = new String[j+1];
 		for(int k=0;k<resultFinal.length;k++) resultFinal[k]=result[k];
 		return resultFinal;
+	}
+	
+	/**
+	 * @param chaine - Chaine de mots présents dans le paragraphe
+	 * @param cara - Tableau donnant pour chaque caractère sa largeur
+	 * @return - Renvoie la largeur totale du paragraphe.
+	 */
+	public static double largeurParagraphe(String[] chaine, double[] cara){
+		double largeur = 0 ;
+		for (int k =0;k<chaine.length;k++) {
+			double temp=0;
+			for(int j=0;j<chaine[k].length();j++) temp += cara[chaine[k].charAt(j)];
+			largeur += temp;
+		}
+		return largeur;
 	}
 
 }
