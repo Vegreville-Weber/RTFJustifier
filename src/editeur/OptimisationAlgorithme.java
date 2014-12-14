@@ -28,7 +28,18 @@ public class OptimisationAlgorithme {
 	 * @param largeurBloc - Largeur du bloc où on écrit le paragraphe.
 	 * @return - Renvoie le paragraphe mis en page
 	 */
+	public static String niceParagraph(Font f, String paragraphe,double largeurBloc){
+		Polices pol = new Polices(f);
+    	double[] largeur = pol.getLargeurs();
+    	return niceParagraph(paragraphe,largeur,largeurBloc);
+	}
 	
+	/**
+	 * @param paragraphe - Paragraphe à mettre en page EN CONSIDERANT UN SEUL ESPACE ENTRE CHAQUE MOT
+	 * @param largeur - Tableau donnant pour chaque caractère (ESPACE BLANC inclus) la largeur du caractère
+	 * @param largeurBloc - Largeur du bloc où on écrit le paragraphe.
+	 * @return - Renvoie le paragraphe mis en page
+	 */
 	//LARGEURBLOC DOIT ETRE PLUS GRAND QUE LE PLUS GRAND DES MOTS DU PARAGRAPHE
 	public static String niceParagraph(String paragraphe,double[] largeur,double largeurBloc){
 		String[] chaine = chainesdeMots(paragraphe);
