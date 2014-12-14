@@ -13,10 +13,10 @@ public class OptimisationAlgorithme {
 		double largeurBloc = 10 ;
 		System.out.println(niceParagraph(p,cara,largeurBloc));
 		
-		Font f = new Font("SansSerif", Font.PLAIN, 70);
+		Font f = new Font("SansSerif", Font.PLAIN, 12);
     	Polices pol = new Polices(f);
     	double[] carareels = pol.getLargeurs();
-    	double largeurBlocReel = 500;
+    	double largeurBlocReel = 150;
     	System.out.println(niceParagraph(p,carareels,largeurBlocReel));
 		
 
