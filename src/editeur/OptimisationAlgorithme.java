@@ -7,7 +7,7 @@ public class OptimisationAlgorithme {
 	private static final double INFINI = Double.MAX_VALUE;
 
 	public static void main(String[] args) {
-		String p = "aaaaaaa aaaaaaa bbbbbbbb bb ccccc aa bbb aaaaaaa bbcc cccc";
+		String p = "aaaaaaa aaaaaaa bbbbbbbb bb ccccc aa bbb aaaaaaa bbcc cccc cbebycbebceb cb cbeycbbcey bcecbeybcecyiyc cbdh dhcb cb hd cdh cbd hcbd cbdh cdhhccbdcdc cdcbdbcydcb cdbycbdcbydcbyd cbcd dd";
 		/*double[] cara = new double[500];
 		cara['a']=1;cara['b']=1;cara['c']=1;cara[' ']=1;
 		double largeurBloc = 10 ;
@@ -156,7 +156,7 @@ public class OptimisationAlgorithme {
 	
 	public static double largeurMot(String mot, double[] cara){
 		double temp = 0 ;
-			for(int j=0;j<mot.length();j++) temp += cara[mot.charAt(j)];
+			for(int j=0;j<mot.length();j++)	temp += cara[mot.charAt(j)];
 		return temp;
 	}
 	
