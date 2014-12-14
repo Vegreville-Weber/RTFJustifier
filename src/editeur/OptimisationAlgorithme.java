@@ -8,10 +8,10 @@ public class OptimisationAlgorithme {
 
 	public static void main(String[] args) {
 		String p = "aaaaaaa aaaaaaa bbbbbbbb bb ccccc aa bbb aaaaaaa bbcc cccc";
-		double[] cara = new double[500];
+		/*double[] cara = new double[500];
 		cara['a']=1;cara['b']=1;cara['c']=1;cara[' ']=1;
 		double largeurBloc = 10 ;
-		System.out.println(niceParagraph(p,cara,largeurBloc));
+		System.out.println(niceParagraph(p,cara,largeurBloc));*/
 		
 		Font f = new Font("SansSerif", Font.PLAIN, 12);
     	Polices pol = new Polices(f);
