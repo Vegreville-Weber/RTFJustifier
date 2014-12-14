@@ -1,5 +1,7 @@
 package editeur;
 
+import java.awt.Font;
+
 public class OptimisationAlgorithme {
 
 	private static final double INFINI = Double.MAX_VALUE;
@@ -10,8 +12,13 @@ public class OptimisationAlgorithme {
 		cara['a']=1;cara['b']=1;cara['c']=1;cara[' ']=1;
 		double largeurBloc = 10 ;
 		System.out.println(niceParagraph(p,cara,largeurBloc));
-		/*String[] chaine = chainesdeMots(p);
-		for(int k =0;k<chaine.length;k++) System.out.println(chaine[k]);*/
+		
+		Font f = new Font("SansSerif", Font.PLAIN, 70);
+    	Polices pol = new Polices(f);
+    	double[] carareels = pol.getLargeurs();
+    	double largeurBlocReel = 500;
+    	System.out.println(niceParagraph(p,carareels,largeurBlocReel));
+		
 
 	}
 	
@@ -22,7 +29,7 @@ public class OptimisationAlgorithme {
 	 * @return - Renvoie le paragraphe mis en page
 	 */
 	
-	//LARGEUR DOIT ETRE PLUS GRAND QUE LE PLUS GRAND DES MOTS DU PARAGRAPHE
+	//LARGEURBLOC DOIT ETRE PLUS GRAND QUE LE PLUS GRAND DES MOTS DU PARAGRAPHE
 	public static String niceParagraph(String paragraphe,double[] largeur,double largeurBloc){
 		String[] chaine = chainesdeMots(paragraphe);
 		int nombreDeMots = chaine.length;
@@ -30,11 +37,12 @@ public class OptimisationAlgorithme {
 		double[] costFinal = new double[nombreDeMots + 1];
 		double[][] espaces = new double[nombreDeMots + 1][nombreDeMots + 1];
 		int[] p = new int[nombreDeMots + 1];
-
+		
+		double blank = largeur[' '];
 		for (int i = 1; i <= nombreDeMots; i++) {
-			espaces[i][i] = largeurBloc - chaine[i - 1].length();
+			espaces[i][i] = largeurBloc - largeurMot(chaine[i-1],largeur);
 			for (int j = i + 1; j <= nombreDeMots; j++) {
-				espaces[i][j] = espaces[i][j - 1] - chaine[j - 1].length() - 1;
+				espaces[i][j] = espaces[i][j - 1] - largeurMot(chaine[j-1],largeur) - blank;
 			}
 		}
 
@@ -134,5 +142,12 @@ public class OptimisationAlgorithme {
 		}
 		return largeur;
 	}
+	
+	public static double largeurMot(String mot, double[] cara){
+		double temp = 0 ;
+			for(int j=0;j<mot.length();j++) temp += cara[mot.charAt(j)];
+		return temp;
+	}
+	
 
 }
