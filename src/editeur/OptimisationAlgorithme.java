@@ -62,12 +62,12 @@ public class OptimisationAlgorithme {
 		String resultat = new String();
 		int pointeur = nombreDeMots;
 		while (pointeur >= 1) {
-			String temp = "\n";;
-			System.out.println(temp);
+			String temp = new String();
 			for (int k = p[pointeur]; k < pointeur; k++) {
 				temp+=(chaine[k-1]+" ");
 			}
 			temp+=chaine[pointeur-1];
+			temp+="\n";
 			resultat = temp+=resultat;
 			pointeur = p[pointeur]-1;
 		}
