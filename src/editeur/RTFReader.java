@@ -59,7 +59,10 @@ public class RTFReader {
 					for(String s : this.fontnames.values())System.out.println(s);
 				}
 				if(line.contains("\\paper")){
-					this.searchSize(line);
+					this.searchSize(line); System.out.println("paperh: "+this.paperh+" paperw: "+this.paperw);
+				}
+				if(line.contains("\\marg")){
+					this.searchMargins(line); System.out.println(" margint :"+this.margint+" marginb :"+this.marginb+" marginr :"+this.marginr+" marginl :"+this.marginl);
 				}
 			}
 			} finally {
@@ -101,6 +104,7 @@ public class RTFReader {
 					char temp = size[k].charAt(i);
 					if(temp=='\\')break;
 					paperh+=temp;
+					i++;
 				}
 				this.paperh=Double.parseDouble(paperh);
 			}
@@ -112,10 +116,51 @@ public class RTFReader {
 					char temp = size[k].charAt(i);
 					if(temp=='\\')break;
 					paperh+=temp;
+					i++;
 				}
 				this.paperw=Double.parseDouble(paperh);
 			}
+		}
 	}
+	
+	public void searchMargins(String line){
+		String[] margins = line.split("marg",5);
+		for(int k=0;k<margins.length;k++){
+			char init = margins[k].charAt(0);
+			boolean isNextDouble = true;
+		    try {
+		    	Double.parseDouble(Character.toString(margins[k].charAt(1)));
+		    } catch (NumberFormatException nfe) {
+		        isNextDouble=false;
+		    }
+			if(isNextDouble&&(init=='l'||init=='b'||init=='r'||init=='t')){
+				String margin ="";
+				int i =1;
+				int n = margins[k].length();
+				while(i<n){
+					char temp = margins[k].charAt(i);
+					if(temp=='\\')break;
+					margin+=temp;
+					i++;
+				}
+				double doublemargin = Double.parseDouble(margin);
+				switch(init){
+				case 'l':
+					this.marginl=doublemargin;
+					break;
+				case 'r':
+					this.marginr=doublemargin;
+					break;
+				case 'b':
+					this.marginb=doublemargin;
+					break;
+				case 't':
+					this.margint=doublemargin;
+					break;
+				default:break;
+				}
+			}
+		}
 	}
 }
 
