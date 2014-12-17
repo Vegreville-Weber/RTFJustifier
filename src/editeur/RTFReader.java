@@ -54,7 +54,7 @@ public class RTFReader {
 				String line;
 			while ((line = buff.readLine()) != null) {
 				System.out.println(line);
-				if(line.startsWith("{\\fonttbl")){
+				if(line.contains("{\\fonttbl")){
 					this.searchFonts(line);
 					for(String s : this.fontnames.values())System.out.println(s);
 				}
