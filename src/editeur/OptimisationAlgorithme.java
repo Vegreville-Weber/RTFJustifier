@@ -13,12 +13,12 @@ public class OptimisationAlgorithme {
 		cara['a']=1;cara['b']=1;cara['c']=1;cara[' ']=1;
 		double largeurBloc = 10 ;
 		System.out.println(niceParagraph(p,cara,largeurBloc));*/
-		
+		String lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer turpis mi, dignissim et dignissim vitae, auctor a lectus. Aenean cursus erat ut magna ultrices mollis. Cras turpis urna, tempus tincidunt dictum non, gravida posuere augue. Ut dapibus ante non sapien facilisis suscipit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed et felis ligula. Sed at mollis est. Cras vestibulum libero ac egestas iaculis. Sed congue nisl sit amet enim tempor sagittis. Donec rhoncus venenatis metus sollicitudin ultrices. Etiam sit amet tincidunt ligula. Proin euismod libero in lorem accumsan, eu lacinia tellus sagittis.";
 		Font f = new Font("SansSerif", Font.PLAIN, 12);
     	Polices pol = new Polices(f);
     	HashMap<Character,Double> carareels = pol.getLargeurs();
-    	double largeurBlocReel = 150;
-    	System.out.println(niceParagraph(p,carareels,largeurBlocReel));
+    	double largeurBlocReel = 600;
+    	System.out.println(niceParagraph(f,lorem,largeurBlocReel));
 		
 
 	}

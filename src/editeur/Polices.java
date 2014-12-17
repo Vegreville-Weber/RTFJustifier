@@ -13,13 +13,14 @@ public class Polices{
     final private static FontRenderContext frc = new FontRenderContext(null, false, false);
     final private Font font;
     final private HashMap<Character,Double> largeur;
-    final private String str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.?!:;%)(,&";
+    final private String str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.?!:;%)( ,&";
     
     public static void main(String[] args) {
     	Font f = new Font("SansSerif", Font.PLAIN, 11);
     	Polices p = new Polices(f);
     	System.out.println(p);
     	System.out.println(f.getSize());
+    	
 
 	}
 
@@ -32,6 +33,7 @@ public class Polices{
     		this.largeur.put(temp, layout.getBounds().getWidth());
     	}
     	this.largeur.put(' ',this.largeur.get('A')); //ARBITRAIRE A CHANGER A TERME
+   
     }
 
     public HashMap<Character,Double> getLargeurs(){

@@ -1,22 +1,35 @@
 package editeur;
 
+import java.util.LinkedList;
+
 public class Main {
 
 	public static void main(String[] args) {
 		if(args.length==1){
 			RTFReader r = new RTFReader(args[0]);
 			r.run();
+			double largeurBloc = (r.paperw-r.marginr-r.marginr)*0.05;
+			LinkedList<Paragraphe> newparagraphes = new LinkedList<Paragraphe>();
 			for (Paragraphe p : r.paragraphes){
-				p.texte=OptimisationAlgorithme.niceParagraph(p.font, p.texte, r.paperw);
+				String newpara = OptimisationAlgorithme.niceParagraph(p.font, p.texte, largeurBloc);
+				Paragraphe temp = new Paragraphe(newpara,p.font,p.fontnum);
+				newparagraphes.add(temp);				
 			}
+			r.paragraphes=newparagraphes;
 			RTFWriter.writeRTF(r);
 		}
 		else{
 			RTFReader r = new RTFReader("TwoParagraph.rtf");
 			r.run();
+			LinkedList<Paragraphe> newparagraphes = new LinkedList<Paragraphe>();
+			double largeurBloc = (r.paperw-r.marginr-r.marginr)*0.05; //On convertit l'unité (le twip) du .rtf en point.
 			for (Paragraphe p : r.paragraphes){
-				p.texte=OptimisationAlgorithme.niceParagraph(p.font, p.texte, r.paperw);
+				String newpara = OptimisationAlgorithme.niceParagraph(p.font, p.texte, largeurBloc);
+				Paragraphe temp = new Paragraphe(newpara,p.font,p.fontnum);
+				newparagraphes.add(temp);			
+				System.out.println(newpara);
 			}
+			r.paragraphes=newparagraphes;
 			RTFWriter.writeRTF(r);
 		}
 
