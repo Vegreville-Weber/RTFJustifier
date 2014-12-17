@@ -64,6 +64,36 @@ public class RTFReader {
 				if(line.contains("\\marg")){
 					this.searchMargins(line); System.out.println(" margint :"+this.margint+" marginb :"+this.marginb+" marginr :"+this.marginr+" marginl :"+this.marginl);
 				}
+				if(line.contains("\\pard")){
+					String[] lines= line.split("ltrch");
+					String info[] = lines[lines.length-1].split("loch");
+					int fontnum=-1;double fontsize=12;
+					if(info.length>1){
+						for(int k=1;k<info.length;k++){
+							if(info[k].contains("\\fs")){
+								String temp =info[k].substring(3); String size ="";
+								int i =0;
+								while(temp.charAt(i)!='\\'){
+									size+=temp.charAt(i);
+									i++;
+								}
+								fontsize=Double.parseDouble(size)/2;
+							}
+							boolean isNextInteger =true;
+							try{
+								Integer.parseInt(Character.toString(info[k].charAt(2)));
+							}
+							catch (NumberFormatException nfe) {
+						        isNextInteger=false;
+						    }
+							if(isNextInteger&&info[k].contains("\\f")){ // ATTENTION IL FAUT POUR L'INSTANT PAS PLUS DE 10 POLICES DECLAREES
+								fontnum = Integer.parseInt(Character.toString(info[k].charAt(2)));
+							}
+						}
+					}
+					System.out.println("fontnum: "+fontnum+"fontsize: "+fontsize);
+				}
+				
 			}
 			} finally {
 				buff.close();
