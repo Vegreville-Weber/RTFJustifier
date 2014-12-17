@@ -28,7 +28,10 @@ public class RTFReader {
 	
 	public static void main(String[] args) {
 		RTFReader r= new RTFReader("TwoParagraph.rtf");
-		r.run();		
+		r.run();
+		for(Paragraphe p : r.paragraphes){
+			System.out.println("fontname:"+p.font.getFontName()+" fontSize:"+p.font.getSize()+" " +p.texte);
+		}
 	}
 	
 	public RTFReader(String path){
@@ -52,8 +55,24 @@ public class RTFReader {
 			 
 			try {
 				String line;
+				boolean onParagraph = false;
+				String currentParagraph="";
+				double currentfontsize = 12; int currentfontnum =-1;
 			while ((line = buff.readLine()) != null) {
-				System.out.println(line);
+				//System.out.println(line);
+				if(onParagraph){
+					if(line.contains("}")){
+						currentParagraph+=line.split("}")[0];
+						Font f;
+						if(currentfontnum==-1) f = new Font("Liberation Serif",Font.PLAIN,(int) currentfontsize);
+						else f = new Font(this.fontnames.get(currentfontnum),Font.PLAIN,(int) currentfontsize);
+						this.paragraphes.add(new Paragraphe(currentParagraph,f));
+						currentfontsize=12;
+						currentfontnum=-1;
+						currentParagraph="";
+						onParagraph=false;
+					}
+				}
 				if(line.contains("{\\fonttbl")){
 					this.searchFonts(line);
 					for(String s : this.fontnames.values())System.out.println(s);
@@ -65,9 +84,9 @@ public class RTFReader {
 					this.searchMargins(line); System.out.println(" margint :"+this.margint+" marginb :"+this.marginb+" marginr :"+this.marginr+" marginl :"+this.marginl);
 				}
 				if(line.contains("\\pard")){
+					String paragraphe="";
 					String[] lines= line.split("ltrch");
 					String info[] = lines[lines.length-1].split("loch");
-					int fontnum=-1;double fontsize=12;
 					if(info.length>1){
 						for(int k=1;k<info.length;k++){
 							if(info[k].contains("\\fs")){
@@ -77,7 +96,7 @@ public class RTFReader {
 									size+=temp.charAt(i);
 									i++;
 								}
-								fontsize=Double.parseDouble(size)/2;
+								currentfontsize=Double.parseDouble(size)/2;
 							}
 							boolean isNextInteger =true;
 							try{
@@ -87,11 +106,12 @@ public class RTFReader {
 						        isNextInteger=false;
 						    }
 							if(isNextInteger&&info[k].contains("\\f")){ // ATTENTION IL FAUT POUR L'INSTANT PAS PLUS DE 10 POLICES DECLAREES
-								fontnum = Integer.parseInt(Character.toString(info[k].charAt(2)));
+								currentfontnum = Integer.parseInt(Character.toString(info[k].charAt(2)));
 							}
 						}
 					}
-					System.out.println("fontnum: "+fontnum+"fontsize: "+fontsize);
+					//System.out.println("fontnum: "+fontnum+"fontsize: "+fontsize);
+					onParagraph=true;
 				}
 				
 			}
@@ -118,7 +138,7 @@ public class RTFReader {
 					if(isOn&&c[i]!=';'&& c[i]!='}') FontName+=c[i];
 					else if(!isOn && c[i]==' ') isOn=true;
 				}
-				if(!this.fontnames.containsValue(FontName))this.fontnames.put(num, FontName);
+				this.fontnames.put(num, FontName);
 			}		
 		}
 	}
