@@ -1,6 +1,7 @@
 package editeur;
 
 import java.awt.Font;
+import java.util.HashMap;
 
 public class OptimisationAlgorithme {
 
@@ -15,7 +16,7 @@ public class OptimisationAlgorithme {
 		
 		Font f = new Font("SansSerif", Font.PLAIN, 12);
     	Polices pol = new Polices(f);
-    	double[] carareels = pol.getLargeurs();
+    	HashMap<Character,Double> carareels = pol.getLargeurs();
     	double largeurBlocReel = 150;
     	System.out.println(niceParagraph(p,carareels,largeurBlocReel));
 		
@@ -30,7 +31,7 @@ public class OptimisationAlgorithme {
 	 */
 	public static String niceParagraph(Font f, String paragraphe,double largeurBloc){
 		Polices pol = new Polices(f);
-    	double[] largeur = pol.getLargeurs();
+    	HashMap<Character,Double> largeur = pol.getLargeurs();
     	return niceParagraph(paragraphe,largeur,largeurBloc);
 	}
 	
@@ -41,7 +42,7 @@ public class OptimisationAlgorithme {
 	 * @return - Renvoie le paragraphe mis en page
 	 */
 	//LARGEURBLOC DOIT ETRE PLUS GRAND QUE LE PLUS GRAND DES MOTS DU PARAGRAPHE
-	public static String niceParagraph(String paragraphe,double[] largeur,double largeurBloc){
+	public static String niceParagraph(String paragraphe,HashMap<Character,Double> largeur,double largeurBloc){
 		String[] chaine = chainesdeMots(paragraphe);
 		int nombreDeMots = chaine.length;
 		double[][] costs = new double[nombreDeMots + 1][nombreDeMots + 1];
@@ -49,7 +50,7 @@ public class OptimisationAlgorithme {
 		double[][] espaces = new double[nombreDeMots + 1][nombreDeMots + 1];
 		int[] p = new int[nombreDeMots + 1];
 		
-		double blank = largeur[' '];
+		double blank = largeur.get(' ');
 		for (int i = 1; i <= nombreDeMots; i++) {
 			espaces[i][i] = largeurBloc - largeurMot(chaine[i-1],largeur);
 			for (int j = i + 1; j <= nombreDeMots; j++) {
@@ -134,8 +135,13 @@ public class OptimisationAlgorithme {
 				result[j]=result[j].concat(Character.toString(temp));
 				}			
 		}
-		String[] resultFinal = new String[j+1];
-		for(int k=0;k<resultFinal.length;k++) resultFinal[k]=result[k];
+		String[] resultFinal;
+		if(result[j]!=null){
+			resultFinal = new String[j+1];
+			for(int k=0;k<resultFinal.length;k++) resultFinal[k]=result[k];}
+		else{
+			resultFinal = new String[j];
+			for(int k=0;k<resultFinal.length;k++) resultFinal[k]=result[k];}
 		return resultFinal;
 	}
 	
@@ -154,9 +160,11 @@ public class OptimisationAlgorithme {
 		return largeur;
 	}
 	
-	public static double largeurMot(String mot, double[] cara){
+	public static double largeurMot(String mot, HashMap<Character,Double> cara){
 		double temp = 0 ;
-			for(int j=0;j<mot.length();j++)	temp += cara[mot.charAt(j)];
+			for(int j=0;j<mot.length();j++){
+				temp += cara.get(mot.charAt(j));
+			}
 		return temp;
 	}
 	

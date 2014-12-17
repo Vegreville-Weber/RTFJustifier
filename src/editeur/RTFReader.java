@@ -66,7 +66,7 @@ public class RTFReader {
 						Font f;
 						if(currentfontnum==-1) f = new Font("Liberation Serif",Font.PLAIN,(int) currentfontsize);
 						else f = new Font(this.fontnames.get(currentfontnum),Font.PLAIN,(int) currentfontsize);
-						this.paragraphes.add(new Paragraphe(currentParagraph,f));
+						this.paragraphes.add(new Paragraphe(currentParagraph,f,currentfontnum));
 						currentfontsize=12;
 						currentfontnum=-1;
 						currentParagraph="";
