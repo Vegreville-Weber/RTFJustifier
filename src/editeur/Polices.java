@@ -16,7 +16,7 @@ public class Polices{
     final private String str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.?!:;%)( ,&";
     
     public static void main(String[] args) {
-    	Font f = new Font("SansSerif", Font.PLAIN, 11);
+    	Font f = new Font("Liberation Sans Serif", Font.PLAIN, 12);
     	Polices p = new Polices(f);
     	System.out.println(p);
     	System.out.println(f.getSize());
