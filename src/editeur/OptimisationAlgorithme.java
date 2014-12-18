@@ -15,9 +15,7 @@ public class OptimisationAlgorithme {
 		System.out.println(niceParagraph(p,cara,largeurBloc));*/
 		String lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer turpis mi, dignissim et dignissim vitae, auctor a lectus. Aenean cursus erat ut magna ultrices mollis. Cras turpis urna, tempus tincidunt dictum non, gravida posuere augue. Ut dapibus ante non sapien facilisis suscipit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed et felis ligula. Sed at mollis est. Cras vestibulum libero ac egestas iaculis. Sed congue nisl sit amet enim tempor sagittis. Donec rhoncus venenatis metus sollicitudin ultrices. Etiam sit amet tincidunt ligula. Proin euismod libero in lorem accumsan, eu lacinia tellus sagittis.";
 		Font f = new Font("SansSerif", Font.PLAIN, 12);
-    	Polices pol = new Polices(f);
-    	HashMap<Character,Double> carareels = pol.getLargeurs();
-    	double largeurBlocReel = 600;
+    	double largeurBlocReel = 481.9;
     	System.out.println(niceParagraph(f,lorem,largeurBlocReel));
 		
 

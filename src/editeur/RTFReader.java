@@ -24,6 +24,7 @@ public class RTFReader {
 	String path;
 	HashMap<Integer,String> fontnames;
 	double paperh,paperw,marginr,marginl,margint,marginb;
+	int fontdefault;
 	
 	
 	public static void main(String[] args) {
@@ -39,6 +40,7 @@ public class RTFReader {
 		this.path=path;
 		this.fontnames=new HashMap<Integer,String>();
 		this.marginb=0;this.marginl=0;this.marginr=0;this.margint=0;this.paperh=0;this.paperw=0;
+		this.fontdefault=0;
 	}
 	
 	public void addParagraphe(Paragraphe p){
@@ -58,6 +60,14 @@ public class RTFReader {
 				boolean onParagraph = false;
 				String currentParagraph="";
 				double currentfontsize = 12; int currentfontnum =-1;
+				line=buff.readLine();
+				try{
+					this.fontdefault=Integer.parseInt(Character.toString(line.split("deff")[1].charAt(0)));
+				}
+				catch(NumberFormatException nfe){
+					System.out.println("pas de police par défault déclarée");
+				}
+				System.out.println("Police par défault : "+this.fontdefault);
 			while ((line = buff.readLine()) != null) {
 				//System.out.println(line);
 				if(onParagraph){
