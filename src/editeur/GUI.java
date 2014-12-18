@@ -75,7 +75,7 @@ public class GUI extends JFrame{
 		JPanel panelLabelSource = new JPanel();
 		panelLabelSource.setLayout(new FlowLayout(FlowLayout.LEFT));
 		panelLabelSource.setBorder(BorderFactory.createTitledBorder("Fichier Source"));
-		JLabel labelSource  = new JLabel("Pas de fichier source");
+		final JLabel labelSource  = new JLabel("Pas de fichier source");
 		//labelSource.setBackground(Color.pink);
 		//labelSource.setOpaque(true);
 		c.fill=GridBagConstraints.HORIZONTAL;
@@ -117,7 +117,7 @@ public class GUI extends JFrame{
 		panelLabelCible.setLayout(new FlowLayout(FlowLayout.LEFT));
 		panelLabelCible.setBorder(BorderFactory.createTitledBorder("Fichier Cible"));
 		
-		JLabel labelCible  = new JLabel("Pas de fichier cible");
+		final JLabel labelCible  = new JLabel("Pas de fichier cible");
 		panelLabelCible.add(labelCible);
 		c.gridx=0;
 		c.gridy=1;
