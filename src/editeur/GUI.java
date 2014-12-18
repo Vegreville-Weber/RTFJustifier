@@ -14,17 +14,21 @@ import java.io.File;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JWindow;
 import javax.swing.filechooser.FileNameExtensionFilter;
  
 public class GUI extends JFrame{
 	static File source = null;
 	static File cible = null;
+	static JFrame reglagesAvances = null;
+	static public boolean coupureMots = true;
 	
 	public static void main(String[] args) {
 		GUI gui= new GUI();
@@ -135,6 +139,8 @@ public class GUI extends JFrame{
             	   String path = cible.getAbsolutePath();
             	   System.out.println(path);
             	   labelCible.setText(path);
+            	   
+            	  // labelCible.get
             	
             	}
             	
@@ -160,6 +166,8 @@ public class GUI extends JFrame{
             		return;
             	}
             	
+            	//Main.run(source.getAbsolutePath(), cible.getAbsolutePath());
+            	
             	
             }
         });
@@ -182,14 +190,43 @@ public class GUI extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Fenêtre en construction");
-				
+				//JOptionPane.showMessageDialog(null, "Fenêtre en construction");
+				reglagesAvances.setVisible(true);
 			}
+			
+			
 		});
 		
 		bottomPanel.add(boutonAvance);
 		backPanel.add(bottomPanel);
 		
+		initReglagesAvances();
+		
 		return backPanel;
+	}
+	
+	private void initReglagesAvances(){
+		reglagesAvances = new JFrame();
+		JPanel backPanel2 = new JPanel();
+		reglagesAvances.setTitle("Réglages Avancés");
+		reglagesAvances.setSize(300, 100);
+		reglagesAvances.setLocationRelativeTo(null);
+		reglagesAvances.setResizable(false);
+		backPanel2.setMinimumSize(reglagesAvances.getSize());
+		backPanel2.setLayout(new BoxLayout(backPanel2, BoxLayout.Y_AXIS));
+		backPanel2.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		JCheckBox boxCoupure = new JCheckBox("Autoriser la coupure de mots");
+		boxCoupure.setSelected(true);
+		boxCoupure.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				coupureMots = !coupureMots;	
+			}
+		});
+		
+		backPanel2.add(boxCoupure);
+		
+		reglagesAvances.setContentPane(backPanel2);
 	}
 }
