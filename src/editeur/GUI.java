@@ -204,7 +204,7 @@ public class GUI extends JFrame{
 		bottomPanel1.setMinimumSize(new Dimension(560,100));
 		bottomPanel1.setOpaque(false);
 		
-		JButton boutonAvance = new JButton("RÃ©glages avancÃ©s");
+		JButton boutonAvance = new JButton("Réglages Avancés");
 		boutonAvance.addActionListener(new ActionListener() {
 			
 			@Override
@@ -240,7 +240,7 @@ public class GUI extends JFrame{
 		reglagesAvances = new JFrame();
 		JPanel backPanel2 = new JPanel();
 		backPanel2.setBackground(backgroundColor);
-		reglagesAvances.setTitle("RÃ©glages AvancÃ©s");
+		reglagesAvances.setTitle("Réglages Avancés");
 		reglagesAvances.setSize(300, 100);
 		reglagesAvances.setLocationRelativeTo(null);
 		reglagesAvances.setResizable(false);
