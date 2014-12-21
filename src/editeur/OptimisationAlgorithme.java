@@ -17,14 +17,13 @@ public class OptimisationAlgorithme {
 		Font f = new Font("SansSerif", Font.PLAIN, 12);
     	double largeurBlocReel = 481.9;
     	System.out.println(niceParagraph(f,lorem,largeurBlocReel));
-		
 
 	}
 	
 	/**
 	 * @param paragraphe - Paragraphe à mettre en page EN CONSIDERANT UN SEUL ESPACE ENTRE CHAQUE MOT
 	 * @param largeur - Tableau donnant pour chaque caractère (ESPACE BLANC inclus) la largeur du caractère
-	 * @param largeurBloc - Largeur du bloc où on écrit le paragraphe.
+	 * @param largeurBloc - Largeur du bloc où on écrit le paragraphe. en point PS
 	 * @return - Renvoie le paragraphe mis en page
 	 */
 	public static String niceParagraph(Font f, String paragraphe,double largeurBloc){
@@ -41,26 +40,37 @@ public class OptimisationAlgorithme {
 	 */
 	//LARGEURBLOC DOIT ETRE PLUS GRAND QUE LE PLUS GRAND DES MOTS DU PARAGRAPHE
 	public static String niceParagraph(String paragraphe,HashMap<Character,Double> largeur,double largeurBloc){
-		String[] chaine = chainesdeMots(paragraphe);
+		String[] chaine = chainesdeMots(paragraphe); //chaine[k] : k-ieme mot du paragraphe
 		int nombreDeMots = chaine.length;
-		double[][] costs = new double[nombreDeMots + 1][nombreDeMots + 1];
-		double[] costFinal = new double[nombreDeMots + 1];
+		
 		double[][] espaces = new double[nombreDeMots + 1][nombreDeMots + 1];
-		int[] p = new int[nombreDeMots + 1];
+		/*espaces[i][j] :  Nombre d'espaces blancs à la fin d'une ligne où on a mit les mots du i-eme mot au j-eme mot.
+		Si cette  suite de mots dépasse la ligne, espaces[i][j] sera négatif */
+		
+		double[][] costs = new double[nombreDeMots + 1][nombreDeMots + 1];
+		// costs[i][j] : Côut d'une ligne où on a mit les mots du i-eme mot au j-ieme mot : espaces[i][j]^3 si espaces[i][j]>=0 , INFINI sinon.
+		
+		double[] costFinal = new double[nombreDeMots + 1];
+		// costFinal[i] : Côut optimal (sommes des costs sur chaque ligne) des lignes formées des mots du premier mot au i-eme mot.
+		
+		int[] p = new int[nombreDeMots + 1]; 
+		//pointeur qui retient les positions des sauts de ligne dans la solution finale.
 		
 		double blank = largeur.get(' ');
-		for (int i = 1; i <= nombreDeMots; i++) {
-			espaces[i][i] = largeurBloc - largeurMot(chaine[i-1],largeur);
+		//largeur en point d'un espace.
+		
+		for (int i = 1; i <= nombreDeMots; i++) { //on remplit le tableau espaces.
+			espaces[i][i] = largeurBloc - largeurMot(chaine[i-1],largeur); //ligne ne comportant que le i-eme mot
 			for (int j = i + 1; j <= nombreDeMots; j++) {
 				espaces[i][j] = espaces[i][j - 1] - largeurMot(chaine[j-1],largeur) - blank;
 			}
 		}
 
-		for (int i = 1; i <= nombreDeMots; i++) {
+		for (int i = 1; i <= nombreDeMots; i++) { //on remplit le tableau costs.
 			for (int j = i; j <= nombreDeMots; j++) {
 				if (espaces[i][j] < 0)
 					costs[i][j] = INFINI;
-				else if (j == nombreDeMots && espaces[i][j] >= 0)
+				else if (j == nombreDeMots && espaces[i][j] >= 0) //on ne prend pas en compte la dernière ligne.
 					costs[i][j] = 0;
 				else
 					costs[i][j] = espaces[i][j] * espaces[i][j] * espaces[i][j];
@@ -73,19 +83,19 @@ public class OptimisationAlgorithme {
 			for (int i = 1; i <= j; i++) {
 				if (costFinal[i-1] != INFINI && costs[i][j] != INFINI && (costFinal[i-1] + costs[i][j] < costFinal[j])) {
 					costFinal[j] = costFinal[i - 1] + costs[i][j];
-					p[j] = i;
+					p[j] = i; //on retient le saut de ligne.
 				}
 			}
 		}
 		String resultat = new String();
 		int pointeur = nombreDeMots;
-		while (pointeur >= 1) {
+		while (pointeur >= 1) { //on construit le paragraphe final.
 			String temp = new String();
 			for (int k = p[pointeur]; k < pointeur; k++) {
 				temp+=(chaine[k-1]+" ");
 			}
 			temp+=chaine[pointeur-1];
-			temp+="\n";
+			temp+=System.lineSeparator();
 			resultat = temp+=resultat;
 			pointeur = p[pointeur]-1;
 		}
@@ -94,31 +104,8 @@ public class OptimisationAlgorithme {
 	
 	/**
 	 * @param paragraphe - Paragraphe à traiter
-	 * @return - Renvoie un tableau de String qui correspond à chaque mots présents dans le paragraphe. ATTENTION les espaces comptent comme des mots.
-	 */
-	public static String[] chainesdeMotsAvecEspaces(String paragraphe){
-		String[] result = new String[paragraphe.length()];
-		int j =0; boolean isPreviousBlank = true;
-		for(int i = 0;i<paragraphe.length();i++){
-			char temp = paragraphe.charAt(i);
-			if(temp!=' '){				
-				if(isPreviousBlank&&j!=0) {
-					isPreviousBlank = false;
-					j++;
-				}				
-			}
-			else{
-				if(!isPreviousBlank||j==0){				
-					isPreviousBlank =true;
-					j++;}				
-			}
-			if(result[j]==null) result[j] = new String();
-			result[j]=result[j].concat(Character.toString(temp));			
-		}
-		String[] resultFinal = new String[j+1];
-		for(int k=0;k<resultFinal.length;k++) resultFinal[k]=result[k];
-		return resultFinal;
-	}
+	 * @return - Renvoie un tableau de String qui correspond à chaque mots présents dans le paragraphe. ATTENTION : il n'y a plus les espaces.
+	 */	
 	
 	public static String[] chainesdeMots(String paragraphe){
 		String[] result = new String[paragraphe.length()];
@@ -158,6 +145,11 @@ public class OptimisationAlgorithme {
 		return largeur;
 	}
 	
+	/**
+	 * @param mot - Mot dont on désire la largeur
+	 * @param cara - Tableau donnant pour chaque caractère sa largeur
+	 * @return - Renvoie la largeur du mot
+	 */
 	public static double largeurMot(String mot, HashMap<Character,Double> cara){
 		double temp = 0 ;
 			for(int j=0;j<mot.length();j++){

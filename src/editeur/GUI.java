@@ -185,8 +185,8 @@ public class GUI extends JFrame{
             		return;
             	}
             	
-            	//Main.run(source.getAbsolutePath(), cible.getAbsolutePath());
-            	
+            	Main.run(source.getAbsolutePath(), cible.getAbsolutePath());
+            	JOptionPane.showMessageDialog(null, "Opération terminée!");
             	
             }
         });

@@ -16,7 +16,7 @@ import com.tutego.jrtf.RtfDocfmt;
 import com.tutego.jrtf.RtfPara;
 import com.tutego.jrtf.RtfUnit;
 
-public class RTFWriter {
+public class RTFWriter { //une fois connues grâce à RTFReader les caractéristiques du fichier source, RTFWriter écrit les nouveaux paragraphes dans le fichier cible.
 
 	public static void main(String[] args) {
 		String lorem ="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse semper consequat elementum. Donec ultricies cursus justo, a eleifend mauris ultrices a. Nam elementum sapien id sodales viverra. Morbi vestibulum odio ut purus placerat tristique. Duis sed rhoncus tortor. Vestibulum in semper purus. Nam eget auctor augue. Sed ut volutpat nibh, eget mollis diam. Ut tincidunt ex et dui semper mattis. Nulla non lacus iaculis justo pretium hendrerit vitae eu odio. Sed sagittis aliquam tellus quis mollis. Ut id eleifend enim. Aliquam mollis vitae eros a dignissim. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Integer dapibus, ligula eget finibus hendrerit, metus ante aliquam quam, aliquet laoreet ligula odio at dolor. Nulla viverra, enim ut imperdiet venenatis, eros odio porttitor neque, quis aliquet mauris turpis et sem.";

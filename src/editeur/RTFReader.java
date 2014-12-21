@@ -19,12 +19,14 @@ import javax.swing.text.Element;
 import javax.swing.text.rtf.RTFEditorKit;
 
 
-public class RTFReader {
-	LinkedList<Paragraphe> paragraphes ;
-	String path;
-	HashMap<Integer,String> fontnames;
-	double paperh,paperw,marginr,marginl,margint,marginb;
+public class RTFReader { //classe utilisé pour retenir toutes les informations utiles lors de la lecture de la source
+	LinkedList<Paragraphe> paragraphes ; //paragraphes présents dans la source.
+	String path; //chemin de la source.
+	HashMap<Integer,String> fontnames; //polices déclarées au début de la source
+	double paperh,paperw,marginr,marginl,margint,marginb; //hauteur(h),largeur(w) et marges(right,left,top,bottom) 
+	//ATTENTION : hauteur,largeur et marges sont en TWIP, unité utilisée par le format RTF.
 	int fontdefault;
+	//indice de la police déclarée comme police par défaut par la source.
 	
 	
 	public static void main(String[] args) {
@@ -51,17 +53,19 @@ public class RTFReader {
 		this.fontnames.put(key, f);
 	}
 	
+	
+	//la methode run() parse le fichier source et sauvegarde toutes les informations utiles
 	public	void run(){
 		try{
 			BufferedReader buff = new BufferedReader(new FileReader(this.path));
 			 
 			try {
 				String line;
-				boolean onParagraph = false;
-				String currentParagraph="";
-				double currentfontsize = 12; int currentfontnum =-1;
+				boolean onParagraph = false; //le BufferedReader est-t'il actuellement en train de lire un paragraphe ?
+				String currentParagraph=""; //si oui, on enregistre au fur et au mesure les lignes dans currentParagraph.
+				double currentfontsize = 12; int currentfontnum =-1; // si on est dans un paragraphe, quelle est la police et la taille de la police utilisée?
 				line=buff.readLine();
-				try{
+				try{ //Normalement, la police par défaut est déclarée sur la première ligne.
 					this.fontdefault=Integer.parseInt(Character.toString(line.split("deff")[1].charAt(0)));
 				}
 				catch(NumberFormatException nfe){
@@ -70,36 +74,41 @@ public class RTFReader {
 				System.out.println("Police par défault : "+this.fontdefault);
 			while ((line = buff.readLine()) != null) {
 				//System.out.println(line);
-				if(onParagraph){
-					if(line.contains("}")){
+				if(onParagraph){ //Si on se trouve dans un paragraphe.
+					if(line.contains("}")){ //si cette ligne est la fin d'un paragraphe
 						currentParagraph+=line.split("}")[0];
 						Font f;
 						if(currentfontnum==-1) f = new Font("Liberation Serif",Font.PLAIN,(int) currentfontsize);
 						else f = new Font(this.fontnames.get(currentfontnum),Font.PLAIN,(int) currentfontsize);
-						this.paragraphes.add(new Paragraphe(currentParagraph,f,currentfontnum));
-						currentfontsize=12;
+						this.paragraphes.add(new Paragraphe(currentParagraph,f,currentfontnum)); //on rajoute le paragraphe à la liste paragraphes.
+						currentfontsize=12;  // on remet à zéro les variables currentfontsize,currentfontnum,currentParagraph et onParagraph
 						currentfontnum=-1;
 						currentParagraph="";
 						onParagraph=false;
 					}
+					else{
+						currentParagraph+=line;
+					}
 				}
-				if(line.contains("{\\fonttbl")){
-					this.searchFonts(line);
+				if(line.contains("{\\fonttbl")){ //cas où on est en train de lire la ligne qui déclare toutes les polices.
+					this.searchFonts(line); //fonction traitant la ligne pour y trouver le nom et les indices des polices
 					for(String s : this.fontnames.values())System.out.println(s);
 				}
-				if(line.contains("\\paper")){
-					this.searchSize(line); System.out.println("paperh: "+this.paperh+" paperw: "+this.paperw);
+				if(line.contains("\\paper")){ //cas où on est en train de lire la ligne qui déclare les dimensions.
+					this.searchSize(line); //fonction traitant la ligne pour y trouver la largeur et la hauteur de la page
+					System.out.println("paperh: "+this.paperh+" paperw: "+this.paperw);
 				}
-				if(line.contains("\\marg")){
-					this.searchMargins(line); System.out.println(" margint :"+this.margint+" marginb :"+this.marginb+" marginr :"+this.marginr+" marginl :"+this.marginl);
+				if(line.contains("\\marg")){ //cas où on est en train de lire la ligne qui déclare toutes les marges.
+					this.searchMargins(line); //fonction traitant la ligne pour y trouver les marges utilsiées
+					System.out.println(" margint :"+this.margint+" marginb :"+this.marginb+" marginr :"+this.marginr+" marginl :"+this.marginl);
 				}
-				if(line.contains("\\pard")){
+				if(line.contains("\\pard")){ ////cas où on est en train de lire la ligne qui déclare un nouveau paragraphe
 					String paragraphe="";
 					String[] lines= line.split("ltrch");
 					String info[] = lines[lines.length-1].split("loch");
 					if(info.length>1){
 						for(int k=1;k<info.length;k++){
-							if(info[k].contains("\\fs")){
+							if(info[k].contains("\\fs")){ //regarde si une taille de police est déclarée pour ce paragraphe
 								String temp =info[k].substring(3); String size ="";
 								int i =0;
 								while(temp.charAt(i)!='\\'){
@@ -109,7 +118,7 @@ public class RTFReader {
 								currentfontsize=Double.parseDouble(size)/2;
 							}
 							boolean isNextInteger =true;
-							try{
+							try{ //permet de voir si une police a été déclarée pour ce paragraphe.
 								Integer.parseInt(Character.toString(info[k].charAt(2)));
 							}
 							catch (NumberFormatException nfe) {
@@ -121,7 +130,7 @@ public class RTFReader {
 						}
 					}
 					//System.out.println("fontnum: "+fontnum+"fontsize: "+fontsize);
-					onParagraph=true;
+					onParagraph=true; //la balise \\pard déclare un nouveau paragraphe donc les prochaines lignes feront partie du paragraphe.
 				}
 				
 			}
@@ -133,7 +142,7 @@ public class RTFReader {
 			}
 	}
 	
-	public void searchFonts(String line){
+	public void searchFonts(String line){ //traite la ligne line pour y trouver toutes les polices déclarées
 		String font = new String(line.substring(9));
 		String[] temp = font.split("\\{");
 		for(int k=1;k<temp.length;k++){
@@ -153,7 +162,7 @@ public class RTFReader {
 		}
 	}
 	
-	public void searchSize(String line){
+	public void searchSize(String line){ //traite la ligne line pour y trouver largeur et hauteur
 		String[] size = line.split("paper",3);
 		for(int k=0;k<size.length;k++){
 			if(size[k].charAt(0)=='h'&&this.paperh==0){
@@ -183,7 +192,7 @@ public class RTFReader {
 		}
 	}
 	
-	public void searchMargins(String line){
+	public void searchMargins(String line){ //traite la ligne line pour y trouver les dimensions des marges
 		String[] margins = line.split("marg",5);
 		for(int k=0;k<margins.length;k++){
 			char init = margins[k].charAt(0);
