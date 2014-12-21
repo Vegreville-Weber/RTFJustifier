@@ -65,9 +65,9 @@ public class RTFReader {
 					this.fontdefault=Integer.parseInt(Character.toString(line.split("deff")[1].charAt(0)));
 				}
 				catch(NumberFormatException nfe){
-					System.out.println("pas de police par défault déclarée");
+					System.out.println("pas de police par dï¿½fault dï¿½clarï¿½e");
 				}
-				System.out.println("Police par défault : "+this.fontdefault);
+				System.out.println("Police par dï¿½fault : "+this.fontdefault);
 			while ((line = buff.readLine()) != null) {
 				//System.out.println(line);
 				if(onParagraph){
@@ -97,6 +97,7 @@ public class RTFReader {
 					String paragraphe="";
 					String[] lines= line.split("ltrch");
 					String info[] = lines[lines.length-1].split("loch");
+					System.out.println(info.length);
 					if(info.length>1){
 						for(int k=1;k<info.length;k++){
 							if(info[k].contains("\\fs")){
@@ -110,12 +111,14 @@ public class RTFReader {
 							}
 							boolean isNextInteger =true;
 							try{
+								System.out.println(k + " et  "+info[k]);
 								Integer.parseInt(Character.toString(info[k].charAt(2)));
 							}
-							catch (NumberFormatException nfe) {
+							catch (NumberFormatException | StringIndexOutOfBoundsException nfe  ) { //I add the stringindexoutofboundsexception to deal with the case where there are multiple /loch and no /fs (between the two loch)
 						        isNextInteger=false;
 						    }
-							if(isNextInteger&&info[k].contains("\\f")){ // ATTENTION IL FAUT POUR L'INSTANT PAS PLUS DE 10 POLICES DECLAREES
+			
+							if(isNextInteger&&info[k].contains("\\f")){ // ATTENTION IL NE FAUT POUR L'INSTANT PAS PLUS DE 10 POLICES DECLAREES
 								currentfontnum = Integer.parseInt(Character.toString(info[k].charAt(2)));
 							}
 						}
