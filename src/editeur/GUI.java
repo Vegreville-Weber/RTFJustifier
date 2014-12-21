@@ -240,7 +240,7 @@ public class GUI extends JFrame{
 		JPanel bottomPanel2 = new JPanel();
 		bottomPanel2.setLayout(new FlowLayout(FlowLayout.LEFT));
 		bottomPanel2.setOpaque(false);
-		JLabel labelCredits = new JLabel("by Bruno Vegreville and Come Weber");
+		JLabel labelCredits = new JLabel("by Bruno Vegreville and Côme Weber");
 		Font policeCredits =  new Font("helvetica", Font.ITALIC, 10);
 		labelCredits.setFont(policeCredits);
 		
