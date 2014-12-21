@@ -29,6 +29,7 @@ public class GUI extends JFrame{
 	static File cible = null;
 	static JFrame reglagesAvances = null;
 	static public boolean coupureMots = true;
+	static Color backgroundColor = new Color(245, 245, 245);
 	
 	public static void main(String[] args) {
 		GUI gui= new GUI();
@@ -53,11 +54,13 @@ public class GUI extends JFrame{
 		JPanel backPanel = new JPanel();
 		backPanel.setLayout(new BoxLayout(backPanel, BoxLayout.Y_AXIS));
 		backPanel.setSize(600,400);
+		backPanel.setBackground(backgroundColor);
 		backPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		
 		JPanel topPanel = new JPanel();
 		topPanel.setMinimumSize(new Dimension(560,60));
-		//topPanel.setBackground(Color.cyan);
+		//topPanel.setBackground(bac);
+		topPanel.setOpaque(false);
 		
 		JLabel titre = new JLabel("RTF Justifier Pro");
 		Font policeTitre =  new Font("helvetica", Font.ITALIC, 20);
@@ -68,11 +71,13 @@ public class GUI extends JFrame{
 		JPanel panel = new JPanel();
 		
 		panel.setLayout(new GridBagLayout());
+		panel.setOpaque(false);
 		//panel.setSize(600, 400);
 		
 		GridBagConstraints c = new GridBagConstraints();
 		
 		JPanel panelLabelSource = new JPanel();
+		panelLabelSource.setOpaque(false);
 		panelLabelSource.setLayout(new FlowLayout(FlowLayout.LEFT));
 		panelLabelSource.setBorder(BorderFactory.createTitledBorder("Fichier Source"));
 		final JLabel labelSource  = new JLabel("Pas de fichier source");
@@ -101,6 +106,14 @@ public class GUI extends JFrame{
             	   String path = source.getAbsolutePath();
             	   System.out.println(path);
             	   labelSource.setText(path);
+            	   int taille = labelSource.getFontMetrics(labelSource.getFont()).stringWidth(path);
+            	   while (taille > 325){
+            		   String[] paths= path.split("/", 3);
+            		   path = ".../" + paths[2];
+            		   labelSource.setText(path);
+            		   taille = labelSource.getFontMetrics(labelSource.getFont()).stringWidth(path);
+            		   
+            	   }
             
             	}
             	
@@ -114,6 +127,7 @@ public class GUI extends JFrame{
 		
 		
 		JPanel panelLabelCible = new JPanel();
+		panelLabelCible.setOpaque(false);
 		panelLabelCible.setLayout(new FlowLayout(FlowLayout.LEFT));
 		panelLabelCible.setBorder(BorderFactory.createTitledBorder("Fichier Cible"));
 		
@@ -137,11 +151,16 @@ public class GUI extends JFrame{
             	if (option == JFileChooser.APPROVE_OPTION) {
             	   cible = chooser.getSelectedFile();
             	   String path = cible.getAbsolutePath();
-            	   System.out.println(path);
             	   labelCible.setText(path);
-            	   
-            	  // labelCible.get
-            	
+            	   int taille = labelCible.getFontMetrics(labelCible.getFont()).stringWidth(path);
+            	   while (taille > 325){
+            		   String[] paths= path.split("/", 3);
+            		   path = ".../" + paths[2];
+            		   labelCible.setText(path);
+            		   taille = labelCible.getFontMetrics(labelCible.getFont()).stringWidth(path);
+            		   
+            	   }
+            	                 	
             	}
             	
             }
@@ -180,10 +199,10 @@ public class GUI extends JFrame{
 		 
 		backPanel.add(panel);
 		
-		JPanel bottomPanel = new JPanel();
-		bottomPanel.setLayout( new FlowLayout(FlowLayout.RIGHT));
-		bottomPanel.setMinimumSize(new Dimension(560,100));
-		//bottomPanel.setBackground(Color.cyan);
+		JPanel bottomPanel1 = new JPanel();
+		bottomPanel1.setLayout( new FlowLayout(FlowLayout.RIGHT));
+		bottomPanel1.setMinimumSize(new Dimension(560,100));
+		bottomPanel1.setOpaque(false);
 		
 		JButton boutonAvance = new JButton("Réglages avancés");
 		boutonAvance.addActionListener(new ActionListener() {
@@ -197,8 +216,20 @@ public class GUI extends JFrame{
 			
 		});
 		
-		bottomPanel.add(boutonAvance);
-		backPanel.add(bottomPanel);
+		bottomPanel1.add(boutonAvance);
+		
+		JPanel bottomPanel2 = new JPanel();
+		bottomPanel2.setLayout(new FlowLayout(FlowLayout.LEFT));
+		bottomPanel2.setOpaque(false);
+		JLabel labelCredits = new JLabel("by Bruno Vegreville and Come Weber");
+		Font policeCredits =  new Font("helvetica", Font.ITALIC, 10);
+		labelCredits.setFont(policeCredits);
+		
+		bottomPanel2.add(labelCredits, BorderLayout.SOUTH);
+		
+		
+		backPanel.add(bottomPanel1);
+		backPanel.add(bottomPanel2);
 		
 		initReglagesAvances();
 		
@@ -208,6 +239,7 @@ public class GUI extends JFrame{
 	private void initReglagesAvances(){
 		reglagesAvances = new JFrame();
 		JPanel backPanel2 = new JPanel();
+		backPanel2.setBackground(backgroundColor);
 		reglagesAvances.setTitle("Réglages Avancés");
 		reglagesAvances.setSize(300, 100);
 		reglagesAvances.setLocationRelativeTo(null);
@@ -217,11 +249,13 @@ public class GUI extends JFrame{
 		backPanel2.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		JCheckBox boxCoupure = new JCheckBox("Autoriser la coupure de mots");
 		boxCoupure.setSelected(true);
+		boxCoupure.setOpaque(false);
 		boxCoupure.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				coupureMots = !coupureMots;	
+				System.out.println("La coupure des mots " + ((coupureMots)?"est active" : "n'est pas active"));
 			}
 		});
 		
