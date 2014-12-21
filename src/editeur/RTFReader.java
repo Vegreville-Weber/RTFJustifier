@@ -44,15 +44,7 @@ public class RTFReader { //classe utilis� pour retenir toutes les informations
 		this.marginb=0;this.marginl=0;this.marginr=0;this.margint=0;this.paperh=0;this.paperw=0;
 		this.fontdefault=0;
 	}
-	
-	public void addParagraphe(Paragraphe p){
-		this.paragraphes.add(p);
-	}
-	
-	public void addFont(int key,String f){
-		this.fontnames.put(key, f);
-	}
-	
+		
 	
 	//la methode run() parse le fichier source et sauvegarde toutes les informations utiles
 	public	void run(){

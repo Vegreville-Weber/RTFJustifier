@@ -11,6 +11,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -107,11 +108,20 @@ public class GUI extends JFrame{
             	   System.out.println(path);
             	   labelSource.setText(path);
             	   int taille = labelSource.getFontMetrics(labelSource.getFont()).stringWidth(path);
-            	   while (taille > 325){
-            		   String[] paths= path.split("/", 3);
-            		   path = ".../" + paths[2];
+            	   boolean alreadyCut = false; //savoir si on est deja rentré dans la boucle pour savoir si on enleve de suite le ...\
+            	   String separator  = "\\"; //la variable separator sert à ne pas avoir une boucle propre à un système d'exploitation - Par défaut cas windows.
+            	   if(path.contains("/")) separator = "/"; //cas Unix
+            	   while (taille > 325){ 
+            		   String[] paths;
+            		   if(alreadyCut){ //si on a deja ajouté .../ on l'enleve.
+            			   path = path.split(Pattern.quote(separator),2)[1];
+            		   }
+            		   if(path.contains(separator)) paths= path.split(Pattern.quote(separator), 2); //Le Pattern.quote sert à corriger un bug du au fait qu'on peut pas spliter une string selon un backslash
+            		   else break;  // si il reste rien à couper, tant pis.
+            		   path = "..."+separator + paths[1];
             		   labelSource.setText(path);
-            		   taille = labelSource.getFontMetrics(labelSource.getFont()).stringWidth(path);
+            		   taille = labelSource.getFontMetrics(labelSource.getFont()).stringWidth(path);            		   
+            		   alreadyCut=true;
             		   
             	   }
             
@@ -153,11 +163,20 @@ public class GUI extends JFrame{
             	   String path = cible.getAbsolutePath();
             	   labelCible.setText(path);
             	   int taille = labelCible.getFontMetrics(labelCible.getFont()).stringWidth(path);
-            	   while (taille > 325){
-            		   String[] paths= path.split("/", 3);
-            		   path = ".../" + paths[2];
+            	   boolean alreadyCut = false; //savoir si on est deja rentré dans la boucle pour savoir si on enleve de suite le ...\
+            	   String separator  = "\\"; //la variable separator sert à ne pas avoir une boucle propre à un système d'exploitation - Par défaut cas windows.
+            	   if(path.contains("/")) separator = "/"; //cas Unix
+            	   while (taille > 325){ 
+            		   String[] paths;
+            		   if(alreadyCut){ //si on a deja ajouté .../ on l'enleve.
+            			   path = path.split(Pattern.quote(separator),2)[1];
+            		   }
+            		   if(path.contains(separator)) paths= path.split(Pattern.quote(separator), 2); //Le Pattern.quote sert à corriger un bug du au fait qu'on peut pas spliter une string selon un backslash
+            		   else break;  // si il reste rien à couper, tant pis.
+            		   path = "..."+separator + paths[1];
             		   labelCible.setText(path);
-            		   taille = labelCible.getFontMetrics(labelCible.getFont()).stringWidth(path);
+            		   taille = labelCible.getFontMetrics(labelCible.getFont()).stringWidth(path);            		   
+            		   alreadyCut=true;
             		   
             	   }
             	                 	
