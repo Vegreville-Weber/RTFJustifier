@@ -5,13 +5,13 @@ import java.util.LinkedList;
 public class Main {
 
 	public static void main(String[] args) {
-		/*if(args.length==2){
+		if(args.length==2){
 			run(args[0],args[1]);
 		}
 		else{
 			run("TwoParagraph.rtf","test.rtf");
-		}*/
-		GUI gui= new GUI();
+		}
+		//GUI gui= new GUI();
 	}
 	
 	public static void run(String source, String cible){

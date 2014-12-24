@@ -40,7 +40,10 @@ public class OptimisationAlgorithme {
 	 */
 	//LARGEURBLOC DOIT ETRE PLUS GRAND QUE LE PLUS GRAND DES MOTS DU PARAGRAPHE
 	public static String niceParagraph(String paragraphe,HashMap<Character,Double> largeur,double largeurBloc){
+		if(paragraphe.trim().length()==0) return paragraphe; //paragraphe avec que des blancs.
+		if(paragraphe.isEmpty()) return " ";
 		String[] chaine = chainesdeMots(paragraphe); //chaine[k] : k-ieme mot du paragraphe
+		
 		int nombreDeMots = chaine.length;
 		
 		double[][] espaces = new double[nombreDeMots + 1][nombreDeMots + 1];
