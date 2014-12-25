@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.text.AttributedCharacterIterator.Attribute;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.regex.Pattern;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -68,7 +69,7 @@ public class RTFReader { //classe utilis� pour retenir toutes les informations
 				//System.out.println(line);
 				if(onParagraph){ //Si on se trouve dans un paragraphe.
 					if(line.contains("}")){ //si cette ligne est la fin d'un paragraphe
-						currentParagraph+=line.split("}")[0];
+						currentParagraph+=line.split("}")[0].split(Pattern.quote("\\par"))[0]; //Corrige le bug qui arrivait lorsque l'utilisateur laissait un paragraphe vide
 						Font f;
 						if(currentfontnum==-1) f = new Font("Liberation Serif",Font.PLAIN,(int) currentfontsize);
 						else f = new Font(this.fontnames.get(currentfontnum),Font.PLAIN,(int) currentfontsize);
