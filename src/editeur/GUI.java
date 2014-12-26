@@ -2,6 +2,7 @@ package editeur;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -11,6 +12,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
@@ -205,8 +207,18 @@ public class GUI extends JFrame{
             	}
             	
             	Main.run(source.getAbsolutePath(), cible.getAbsolutePath());
-            	JOptionPane.showMessageDialog(null, "Operation terminee!");
             	
+            	//Ouvre une fenetre pour indiquer la fin du programme et proposer d'ouvrir le RTF
+            	Object[] options = {"Oui","Non"};
+            	int choixOuvrir = JOptionPane.showOptionDialog(null,
+            		 	"Opération terminée!\n Voulez-vous ouvrir le document RTF produit?",
+            			"Opération terminée",
+            			JOptionPane.YES_NO_OPTION,
+            		    JOptionPane.QUESTION_MESSAGE,
+            		    null,     //do not use a custom Icon
+            		    options,  //the titles of buttons
+            		    options[0]); //default button title
+            	if (choixOuvrir==0) open(cible);
             }
         });
 		c.insets = new Insets(40, 0, 0, 0);
@@ -281,5 +293,12 @@ public class GUI extends JFrame{
 		backPanel2.add(boxCoupure);
 		
 		reglagesAvances.setContentPane(backPanel2);
+	}
+	
+	public static void open(File document){
+	   try{
+		Desktop dt = Desktop.getDesktop();
+	    dt.open(document);}
+	   catch(IOException e1){}
 	}
 }
