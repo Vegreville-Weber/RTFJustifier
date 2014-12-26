@@ -1,6 +1,7 @@
 package editeur;
 
 import java.awt.Font;
+import java.awt.font.TextLayout;
 import java.util.HashMap;
 
 public class OptimisationAlgorithme {
@@ -28,8 +29,7 @@ public class OptimisationAlgorithme {
 	 */
 	public static String niceParagraph(Font f, String paragraphe,double largeurBloc){
 		Polices pol = new Polices(f);
-    	HashMap<Character,Double> largeur = pol.getLargeurs();
-    	return niceParagraph(paragraphe,largeur,largeurBloc);
+    	return niceParagraph(paragraphe,pol,largeurBloc);
 	}
 	
 	/**
@@ -39,7 +39,9 @@ public class OptimisationAlgorithme {
 	 * @return - Renvoie le paragraphe mis en page
 	 */
 	//LARGEURBLOC DOIT ETRE PLUS GRAND QUE LE PLUS GRAND DES MOTS DU PARAGRAPHE
-	public static String niceParagraph(String paragraphe,HashMap<Character,Double> largeur,double largeurBloc){
+	public static String niceParagraph(String paragraphe,Polices police,double largeurBloc){
+		
+		HashMap<Character,Double> largeur = police.getLargeurs();
 		if(paragraphe.trim().length()==0) return paragraphe; //paragraphe avec que des blancs.
 		if(paragraphe.isEmpty()) return " ";
 		String[] chaine = chainesdeMots(paragraphe); //chaine[k] : k-ieme mot du paragraphe
@@ -63,9 +65,9 @@ public class OptimisationAlgorithme {
 		//largeur en point d'un espace.
 		
 		for (int i = 1; i <= nombreDeMots; i++) { //on remplit le tableau espaces.
-			espaces[i][i] = largeurBloc - largeurMot(chaine[i-1],largeur); //ligne ne comportant que le i-eme mot
+			espaces[i][i] = largeurBloc - largeurMot(chaine[i-1],police); //ligne ne comportant que le i-eme mot
 			for (int j = i + 1; j <= nombreDeMots; j++) {
-				espaces[i][j] = espaces[i][j - 1] - largeurMot(chaine[j-1],largeur) - blank;
+				espaces[i][j] = espaces[i][j - 1] - largeurMot(chaine[j-1],police) - blank;
 			}
 		}
 
@@ -153,11 +155,13 @@ public class OptimisationAlgorithme {
 	 * @param cara - Tableau donnant pour chaque caractère sa largeur
 	 * @return - Renvoie la largeur du mot
 	 */
-	public static double largeurMot(String mot, HashMap<Character,Double> cara){
+	public static double largeurMot(String mot, Polices police){
 		double temp = 0 ;
-			for(int j=0;j<mot.length();j++){
-				temp += cara.get(mot.charAt(j));
-			}
+//		HashMap<Character, Double> cara = police.getLargeurs();
+//			for(int j=0;j<mot.length();j++){
+//				temp += cara.get(mot.charAt(j));
+//			}
+		temp = (new TextLayout(mot, police.getFont(), Polices.frc)).getVisibleAdvance();
 		return temp;
 	}
 	
