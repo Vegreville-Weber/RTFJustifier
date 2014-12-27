@@ -161,7 +161,7 @@ public class OptimisationAlgorithme {
 //			for(int j=0;j<mot.length();j++){
 //				temp += cara.get(mot.charAt(j));
 //			}
-		temp = (new TextLayout(mot, police.getFont(), Polices.frc)).getVisibleAdvance();
+		temp = (new TextLayout(mot, police.getFont(), Polices.frc)).getAdvance();
 		return temp;
 	}
 	
