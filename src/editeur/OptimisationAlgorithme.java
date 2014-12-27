@@ -3,6 +3,7 @@ package editeur;
 import java.awt.Font;
 import java.awt.font.TextLayout;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 public class OptimisationAlgorithme {
 
@@ -94,12 +95,34 @@ public class OptimisationAlgorithme {
 		}
 		String resultat = new String();
 		int pointeur = nombreDeMots;
+		boolean lastlign=true;
 		while (pointeur >= 1) { //on construit le paragraphe final.
 			String temp = new String();
 			for (int k = p[pointeur]; k < pointeur; k++) {
 				temp+=(chaine[k-1]+" ");
 			}
 			temp+=chaine[pointeur-1];
+			if (!lastlign) {
+				String[] mots = chainesdeMots(temp);
+				int nbrSpace = (int) Math.floor((largeurBloc - largeurMot(temp,
+						police)) / blank);
+				int nbrBoucle = nbrSpace / (mots.length - 1);
+				int reste = nbrSpace % (mots.length - 1);
+				temp = "";
+				for (int i = 0; i < mots.length - 1; i++) {
+					temp += mots[i];
+					for (int j = 0; j <= nbrBoucle; j++)
+						temp += " ";
+					if (reste > 0) {
+						temp += " ";
+						reste--;
+					}
+
+				}
+				temp += mots[mots.length - 1];
+			}
+			else{lastlign=false;}
+			
 			temp+=System.lineSeparator();
 			resultat = temp+=resultat;
 			pointeur = p[pointeur]-1;
