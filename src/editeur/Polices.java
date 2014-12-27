@@ -1,21 +1,10 @@
 package editeur;
 
-import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Toolkit;
 import java.awt.font.FontRenderContext;
-import java.awt.font.GlyphVector;
 import java.awt.font.TextLayout;
-import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 /*	La classe Polices sert à encapsuler une Font et à y ajouter une Hashmap largeur
  *  qui renvoie pour tout les caractères présents dans str leur largeur respectives * 
  * 

@@ -3,21 +3,14 @@ package editeur;
 
 import java.awt.Font;
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.text.AttributedCharacterIterator.Attribute;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.regex.Pattern;
 
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.Element;
-import javax.swing.text.rtf.RTFEditorKit;
 
 
 public class RTFReader { //classe utilis� pour retenir toutes les informations utiles lors de la lecture de la source
@@ -96,7 +89,6 @@ public class RTFReader { //classe utilis� pour retenir toutes les informations
 					System.out.println(" margint :"+this.margint+" marginb :"+this.marginb+" marginr :"+this.marginr+" marginl :"+this.marginl);
 				}
 				if(line.contains("\\pard")){ ////cas o� on est en train de lire la ligne qui d�clare un nouveau paragraphe
-					String paragraphe="";
 					String[] lines= line.split("ltrch");
 					String info[] = lines[lines.length-1].split("loch");
 					System.out.println(info.length);
