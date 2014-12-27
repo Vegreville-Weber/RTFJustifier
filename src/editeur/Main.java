@@ -17,7 +17,8 @@ public class Main {
 	public static void run(String source, String cible){
 		RTFReader r = new RTFReader(source);
 		r.run();
-		double largeurBloc = (r.paperw-r.marginl-r.marginr)*0.05; // On convertit le TWIP en POINT, puis en PX
+		double largeurBloc = (r.paperw-r.marginl-r.marginr)*0.05; // On convertit le TWIP en POINT
+		//System.out.println(largeurBloc);
 		LinkedList<Paragraphe> newparagraphes = new LinkedList<Paragraphe>();
 		for (Paragraphe p : r.paragraphes){
 			String newpara = OptimisationAlgorithme.niceParagraph(p.font, p.texte, largeurBloc);
