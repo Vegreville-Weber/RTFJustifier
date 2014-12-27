@@ -65,7 +65,7 @@ public class GUI extends JFrame{
 		//topPanel.setBackground(bac);
 		topPanel.setOpaque(false);
 		
-		JLabel titre = new JLabel("RTF Justifier Pro");
+		JLabel titre = new JLabel("RTF Justifier");
 		Font policeTitre =  new Font("helvetica", Font.ITALIC, 20);
 		titre.setFont(policeTitre);
 		topPanel.add(titre);
