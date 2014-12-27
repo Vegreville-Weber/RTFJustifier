@@ -67,7 +67,7 @@ public class OptimisationAlgorithme {
 		for (int i = 1; i <= nombreDeMots; i++) { //on remplit le tableau espaces.
 			espaces[i][i] = largeurBloc - largeurMot(chaine[i-1],police); //ligne ne comportant que le i-eme mot
 			for (int j = i + 1; j <= nombreDeMots; j++) {
-				espaces[i][j] = espaces[i][j - 1] - largeurMot(chaine[j-1],police) - blank;
+				espaces[i][j] = espaces[i][j - 1] - largeurMot(" " + chaine[j-1],police);
 			}
 		}
 
@@ -157,10 +157,16 @@ public class OptimisationAlgorithme {
 	 */
 	public static double largeurMot(String mot, Polices police){
 		double temp = 0 ;
+		
+		/**
+		 * On ne calcule plus la largeur des mots en demandant à java de sommer la largeur des caractères
+		 * mais en lui demandant de donner directement la largeur du mot.
+		 */
 //		HashMap<Character, Double> cara = police.getLargeurs();
 //			for(int j=0;j<mot.length();j++){
 //				temp += cara.get(mot.charAt(j));
 //			}
+		
 		temp = (new TextLayout(mot, police.getFont(), Polices.frc)).getAdvance();
 		return temp;
 	}

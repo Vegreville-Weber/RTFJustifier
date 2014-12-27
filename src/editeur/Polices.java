@@ -22,7 +22,7 @@ import javax.swing.JPanel;
  */
 public class Polices{
 
-    public static FontRenderContext frc = new FontRenderContext(null, true, true);
+    public static FontRenderContext frc = new FontRenderContext(null, true, true); // Régler à true, true, était le secret... (Presque deux jours de boulot pour trouver ça) 
     final private Font font;
     final private HashMap<Character,Double> largeur;
     final private static String str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.?!:;%)( ,&"; // tout les caractères pris en compte pour l'instant.
@@ -32,6 +32,13 @@ public class Polices{
     	Polices p = new Polices(f);
     	System.out.println(p);
     	System.out.println(f.getSize());
+    	
+    	/**
+    	 * Tout ce qui suit sont des mesures de lignes de texte faisant toutes une largeur de page dans LibreOffice.  
+    	 * Le but était de voir les réglages à faire pour que Java me dise bien que toutes ces lignes ont une longueur équivalente,
+    	 * puis de voir comment cette longueur est corrélée à largeurBloc
+    	 * Le FRC est extremement important, et il fallait lui demander d'utiliser des FractionalMetrics!
+    	 */
     	
     	System.out.println("Liberation Serif 12 :");
     	f = new Font("Liberation Serif", Font.PLAIN, 12);
@@ -66,26 +73,6 @@ public class Polices{
     	frc = new FontRenderContext(f.getTransform(), true, true);
 
     	System.out.println( new TextLayout("c,ec,sc,smls,,coezoe,m,c,cqm,cm,dsmc,cmssoc,csocso", f, frc).getBounds().getWidth());
-    	
-    	
-//    	JFrame frame = new JFrame();
-//    	frame.setTitle("RTF Justifier"); //On donne un titre Ã  l'application
-//		frame.setSize(600,400); //On donne une taille Ã  notre fenÃªtre
-//		frame.setLocationRelativeTo(null); //On centre la fenÃªtre sur l'Ã©cran
-//		frame.setResizable(false); //On interdit la redimensionnement de la fenÃªtre
-//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //On dit Ã  l'application de se fermer lors du clic sur la croix
-//		frame.setUndecorated(true);
-//		frame.setAlwaysOnTop(true);
-//		frame.setBackground(new Color(1.0f,1.0f,1.0f,0.0f));
-//		JPanel panel = new JPanel();
-//    	JLabel label=new JLabel("c,ec,sc,smls,,coezoe,m,c,cqm,cm,dsmc,cmssoc,csocso");
-//    	label.setFont(f);
-//    	//((Graphics2D) panel.getGraphics()).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-//    	label.setOpaque(false);
-//    	panel.setOpaque(false);
-//    	panel.add(label);
-//    	frame.setContentPane(panel);
-//    	frame.setVisible(true);
 
 	}
 
@@ -95,40 +82,9 @@ public class Polices{
     	frc = new FontRenderContext(font.getTransform(), true, true);
     	for(int k=0;k<str.length();k++){ //Remplissage de la HashMap
     		char temp = str.charAt(k);
-//    		FontMetrics fm = Toolkit.getDefaultToolkit().getFontMetrics(font);
-//    		int [] widths = fm.getWidths();
-    		
     		TextLayout layout = new TextLayout(""+temp, this.font, frc);
-    		TextLayout layout2 = new TextLayout(""+temp+temp, this.font, frc);
-//    		System.out.println(temp + " : advance " + layout.getAdvance() + ", visible advance " + layout.getVisibleAdvance());
-    		System.out.print(temp+ " : ");
-    		System.out.print(layout.getBounds().getWidth()+ " ");
-    		System.out.print(layout2.getBounds().getWidth()+ " ");
-    		System.out.println(layout2.getBounds().getWidth()-layout.getBounds().getWidth());
-    		this.largeur.put(temp, (double) layout2.getBounds().getWidth()-layout.getBounds().getWidth());
-    		if (temp ==' ') System.out.println("taille de l'espace avant modif : " + this.largeur.get(' ') + "pts"); 
+    		this.largeur.put(temp, (double) layout.getAdvance());
     	}
-    	TextLayout layout = new TextLayout("A", this.font, frc);
-    	TextLayout layout2 = new TextLayout("A A", this.font, frc);
-    	this.largeur.put(' ',layout2.getBounds().getWidth() - layout.getBounds().getWidth()-this.largeur.get('A')); //ARBITRAIRE A CHANGER A TERME
-    	System.out.println("taille de l'espace : " + this.largeur.get(' ') + "pts");
-    	
-//    	JLabel label = new JLabel("A");
-//    	label.setFont(this.font);
-//    	for(int k=0;k<str.length();k++){ //Remplissage de la HashMap
-//    		String temp = ""+ str.charAt(k);
-//    		//for(int i = 0; i<20; i++) // 1048576 fois le même caractère
-//    		 //temp = temp+temp;
-//    		//System.out.println(label.getFontMetrics(label.getFont()).stringWidth(temp));
-//    		Double taille = ((double) label.getFontMetrics(label.getFont()).stringWidth(temp));
-//    		this.largeur.put(str.charAt(k), taille);
-//    	}
-   	
-//    	TextLayout layout = new TextLayout("A A", this.font, frc);
-//    	this.largeur.put(' ',layout.getBounds().getWidth() - 2*this.largeur.get('A')); //ARBITRAIRE A CHANGER A TERME
-//    	System.out.println("Pour la police " + this.font.getName());
-//    	System.out.println("taille de l'espace : " + this.largeur.get(' ') + "pts");
-//    	System.out.println("taille du A : " + this.largeur.get('A') + "pts");
     }
 
     public HashMap<Character,Double> getLargeurs(){
@@ -144,6 +100,6 @@ public class Polices{
     	return temp;    	
     }
     
-    public Font getFont(){ return this.font;}
+    public Font getFont(){return this.font;}
 
 }
