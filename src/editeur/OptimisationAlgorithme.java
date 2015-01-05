@@ -101,7 +101,7 @@ public class OptimisationAlgorithme {
 				temp+=(chaine[k-1]+" ");
 			}
 			temp+=chaine[pointeur-1];
-			if (!lastlign) {
+			if (!lastlign && Main.justificationManuelle) {
 				String[] mots = chainesdeMots(temp);
 				int nbrSpace = (int) Math.floor((largeurBloc - largeurMot(temp,
 						police)) / blank);

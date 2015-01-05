@@ -31,7 +31,6 @@ public class GUI extends JFrame{
 	static File source = null;
 	static File cible = null;
 	static JFrame reglagesAvances = null;
-	static public boolean coupureMots = true;
 	static Color backgroundColor = new Color(245, 245, 245);
 	
 	public static void main(String[] args) {
@@ -205,7 +204,7 @@ public class GUI extends JFrame{
             		JOptionPane.showMessageDialog(null, "Vous devez choisir un fichier cible!");
             		return;
             	}
-            	
+ 
             	Main.run(source.getAbsolutePath(), cible.getAbsolutePath());
             	
             	//Ouvre une fenetre pour indiquer la fin du programme et proposer d'ouvrir le RTF
@@ -272,25 +271,54 @@ public class GUI extends JFrame{
 		JPanel backPanel2 = new JPanel();
 		backPanel2.setBackground(backgroundColor);
 		reglagesAvances.setTitle("Réglages Avancés");
-		reglagesAvances.setSize(300, 100);
+		reglagesAvances.setSize(300, 130);
 		reglagesAvances.setLocationRelativeTo(null);
 		reglagesAvances.setResizable(false);
 		backPanel2.setMinimumSize(reglagesAvances.getSize());
 		backPanel2.setLayout(new BoxLayout(backPanel2, BoxLayout.Y_AXIS));
 		backPanel2.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		JCheckBox boxCoupure = new JCheckBox("Autoriser la coupure de mots");
-		boxCoupure.setSelected(true);
+		boxCoupure.setSelected(Main.coupureMots);
 		boxCoupure.setOpaque(false);
 		boxCoupure.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				coupureMots = !coupureMots;	
-				System.out.println("La coupure des mots " + ((coupureMots)?"est active" : "n'est pas active"));
+				Main.coupureMots = !Main.coupureMots;
+				System.out.println("La coupure des mots " + ((Main.coupureMots)?"est active" : "n'est pas active"));
+			}
+		});
+		JCheckBox boxJustificationManuelle = new JCheckBox("Justifier en ajoutant des espaces");
+		boxJustificationManuelle.setSelected(Main.justificationManuelle);
+		boxJustificationManuelle.setOpaque(false);
+		JCheckBox boxJustificationLogicielle = new JCheckBox("Justification logicielle des lignes");
+		boxJustificationLogicielle.setSelected(Main.justificationLogicielle);
+		boxJustificationLogicielle.setOpaque(false);
+		boxJustificationManuelle.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Main.justificationManuelle = !Main.justificationManuelle;
+				Main.justificationLogicielle = !Main.justificationLogicielle;
+				boxJustificationLogicielle.setSelected(!boxJustificationLogicielle.isSelected());
+			}
+		});
+		boxJustificationLogicielle.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Main.justificationManuelle = !Main.justificationManuelle;
+				Main.justificationLogicielle = !Main.justificationLogicielle;
+				boxJustificationManuelle.setSelected(!boxJustificationManuelle.isSelected());
 			}
 		});
 		
+		
+		
 		backPanel2.add(boxCoupure);
+		backPanel2.add(boxJustificationManuelle);
+		backPanel2.add(boxJustificationLogicielle);
+		
 		
 		reglagesAvances.setContentPane(backPanel2);
 	}
