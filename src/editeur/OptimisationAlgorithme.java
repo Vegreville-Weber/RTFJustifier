@@ -41,7 +41,6 @@ public class OptimisationAlgorithme {
 	 */
 	//LARGEURBLOC DOIT ETRE PLUS GRAND QUE LE PLUS GRAND DES MOTS DU PARAGRAPHE
 	public static String niceParagraph(String paragraphe,Polices police,double largeurBloc){
-		
 		HashMap<Character,Double> largeur = police.getLargeurs();
 		if(paragraphe.trim().length()==0) return paragraphe; //paragraphe avec que des blancs.
 		if(paragraphe.isEmpty()) return " ";

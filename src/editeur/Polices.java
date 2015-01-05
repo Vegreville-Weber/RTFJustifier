@@ -14,7 +14,7 @@ public class Polices{
     public static FontRenderContext frc = new FontRenderContext(null, true, true); // Régler à true, true, était le secret... (Presque deux jours de boulot pour trouver ça) 
     final private Font font;
     final private HashMap<Character,Double> largeur;
-    final private static String str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.?!:;%)( ,&"; // tout les caractères pris en compte pour l'instant.
+    final private static String str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.?!:;%-)( ,&"; // tout les caractères pris en compte pour l'instant.
     
     public static void main(String[] args) {
     	Font f = new Font("Liberation Serif", Font.PLAIN, 16);
