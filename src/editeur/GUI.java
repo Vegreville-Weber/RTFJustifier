@@ -199,10 +199,14 @@ public class GUI extends JFrame{
             	if (source==null){
             		JOptionPane.showMessageDialog(null, "Vous devez choisir un fichier source!");
             		return;
-            		}
-            	else if(cible==null){
-            		JOptionPane.showMessageDialog(null, "Vous devez choisir un fichier cible!");
-            		return;
+            	}
+            	if(cible==null){
+            		String separator  = "\\"; //la variable separator sert à ne pas avoir une boucle propre à un système d'exploitation - Par défaut cas windows.
+             	   	if(source.getAbsolutePath().contains("/")) separator = "/"; //cas Unix
+             	   	String names[]=source.getAbsolutePath().split(separator);
+            		JOptionPane.showMessageDialog(null, "Vous n'avez pas choisi de fichier cible!\nLe fichier écrit sera " +names[names.length-1].replaceAll(".rtf", "-justified.rtf") );
+            		cible = new File(source.getAbsolutePath().replaceAll(".rtf", "-justified.rtf"));
+            	
             	}
  
             	Main.run(source.getAbsolutePath(), cible.getAbsolutePath());
