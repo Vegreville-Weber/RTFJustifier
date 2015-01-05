@@ -5,13 +5,34 @@ import java.util.LinkedList;
 public class Main {
 
 	public static void main(String[] args) {
-		/*if(args.length==2){
-			run(args[0],args[1]);
+		if(args.length==2){
+			String source="";
+			String dest="";
+			int coupureMots=0;
+			int justificationManuelle=-1; //justification par ajout d'espaces
+			int justificationLogicielle=-1; // demande au logiciel de justifier chaque ligne
+			for (int i = 0; i<args.length; i++){
+				System.out.println("Le premier argument est : " + args[i]);
+				if(args[i].equals("-mj")) justificationManuelle=1;
+				else if(args[i].equals("-sj")) justificationLogicielle=1;
+				else if(args[i].equals("-cw")) coupureMots=1;
+				else if(args[i].startsWith("source=")) source=args[i].substring(7);
+				else if(args[i].startsWith("dest=")) dest=args[i].substring(5);
+			}
+			
+			if (justificationManuelle==1 && justificationLogicielle==1) throw new Error("-mj and -sj are not compatible");
+			if (justificationManuelle!=1 && justificationLogicielle!=1) justificationManuelle=1;//Par defaut c'est la justification manuelle qui est choisie
+			if (justificationManuelle==-1)justificationManuelle=0;
+			if (justificationLogicielle==-1) justificationLogicielle=0;
+			if (dest.equals("")) dest=source.replaceAll(".rtf", "-justified.rtf");
+			
+			run(source,dest);
+			
 		}
 		else{
-			run("TwoParagraph.rtf","test.rtf");
-		}*/
-		GUI gui= new GUI();
+			GUI gui= new GUI();
+		}
+		
 	}
 	
 	public static void run(String source, String cible){
