@@ -10,6 +10,7 @@ public class Main {
 	public static boolean coupureMots= false; //autorise la coupure de mots (l'hyphenation) ou pas
 	
 	public static void main(String[] args) {
+		//Si le logiciel est executé en ligne de commande
 		if(args.length>=1){
 			String source="";
 			String dest="";
@@ -28,6 +29,8 @@ public class Main {
 				else if(args[i].startsWith("dest=")) dest=args[i].substring(5);
 			}
 			
+			//Si le fichier source n'est pas spécifié
+			if (source.equals("")) throw new Error("Vous devez indiquer un fichier source");
 			//Si le fichier de destination n'est pas spécifié
 			if (dest.equals("")) dest=source.replaceAll(".rtf", "-justified.rtf");
 			
@@ -38,6 +41,7 @@ public class Main {
 			}
 			
 		}
+		//en l'absence d'arguments on demarre l'interface graphique
 		else{
 			GUI gui= new GUI();
 		}

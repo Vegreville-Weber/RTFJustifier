@@ -39,17 +39,17 @@ public class GUI extends JFrame{
 	public GUI(){
 		super();
  
-		build();//On initialise notre fenÃªtre
+		build();//On initialise notre fenêtre
 		this.setContentPane(buildContentPane());
 		this.setVisible(true);
 	}
  
 	private void build(){
-		setTitle("RTF Justifier"); //On donne un titre Ã  l'application
-		setSize(600,400); //On donne une taille Ã  notre fenÃªtre
-		setLocationRelativeTo(null); //On centre la fenÃªtre sur l'Ã©cran
-		setResizable(false); //On interdit la redimensionnement de la fenÃªtre
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //On dit Ã  l'application de se fermer lors du clic sur la croix
+		setTitle("RTF Justifier"); //Titre de l'application
+		setSize(600,400); //Taille de la fenêtre
+		setLocationRelativeTo(null); //centrage de la fenêtre sur l'écran
+		setResizable(false); //On interdit la redimensionnement de la fenêtre
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //l'application se ferme lorsqu'on ferme la fenêtre
 	}
 	
 	private JPanel buildContentPane(){
@@ -61,7 +61,6 @@ public class GUI extends JFrame{
 		
 		JPanel topPanel = new JPanel();
 		topPanel.setMinimumSize(new Dimension(560,60));
-		//topPanel.setBackground(bac);
 		topPanel.setOpaque(false);
 		
 		JLabel titre = new JLabel("RTF Justifier");
@@ -74,7 +73,6 @@ public class GUI extends JFrame{
 		
 		panel.setLayout(new GridBagLayout());
 		panel.setOpaque(false);
-		//panel.setSize(600, 400);
 		
 		GridBagConstraints c = new GridBagConstraints();
 		
@@ -83,8 +81,6 @@ public class GUI extends JFrame{
 		panelLabelSource.setLayout(new FlowLayout(FlowLayout.LEFT));
 		panelLabelSource.setBorder(BorderFactory.createTitledBorder("Fichier Source"));
 		final JLabel labelSource  = new JLabel("Pas de fichier source");
-		//labelSource.setBackground(Color.pink);
-		//labelSource.setOpaque(true);
 		c.fill=GridBagConstraints.HORIZONTAL;
 		c.gridx=0;
 		c.gridy=0;
@@ -294,7 +290,6 @@ public class GUI extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Main.coupureMots = !Main.coupureMots;
-				System.out.println("La coupure des mots " + ((Main.coupureMots)?"est active" : "n'est pas active"));
 			}
 		});
 		final JCheckBox boxJustificationManuelle = new JCheckBox("Justifier en ajoutant des espaces");
