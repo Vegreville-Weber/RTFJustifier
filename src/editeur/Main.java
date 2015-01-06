@@ -48,7 +48,11 @@ public class Main {
 		//System.out.println(largeurBloc);
 		LinkedList<Paragraphe> newparagraphes = new LinkedList<Paragraphe>();
 		for (Paragraphe p : r.paragraphes){
-			String newpara = OptimisationAlgorithme.niceParagraph(p.font, p.texte, largeurBloc);
+			String newpara;
+			if(Main.coupureMots)
+				newpara = HyphenationAlgorithme.niceParagraph(p.font, p.texte, largeurBloc);
+			else
+				newpara = OptimisationAlgorithme.niceParagraph(p.font, p.texte, largeurBloc);	
 			Paragraphe temp = new Paragraphe(newpara,p.font,p.fontnum);
 			newparagraphes.add(temp);				
 		}
