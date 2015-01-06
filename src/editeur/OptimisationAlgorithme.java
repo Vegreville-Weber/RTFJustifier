@@ -9,19 +9,6 @@ import static com.tutego.jrtf.Rtf.rtf;
 public class OptimisationAlgorithme {
 
 	private static final double INFINI = Double.MAX_VALUE;
-
-	public static void main(String[] args) {
-		String p = "aaaaaaa aaaaaaa bbbbbbbb bb ccccc aa bbb aaaaaaa bbcc cccc cbebycbebceb cb cbeycbbcey bcecbeybcecyiyc cbdh dhcb cb hd cdh cbd hcbd cbdh cdhhccbdcdc cdcbdbcydcb cdbycbdcbydcbyd cbcd dd";
-		/*double[] cara = new double[500];
-		cara['a']=1;cara['b']=1;cara['c']=1;cara[' ']=1;
-		double largeurBloc = 10 ;
-		System.out.println(niceParagraph(p,cara,largeurBloc));*/
-		String lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer turpis mi, dignissim et dignissim vitae, auctor a lectus. Aenean cursus erat ut magna ultrices mollis. Cras turpis urna, tempus tincidunt dictum non, gravida posuere augue. Ut dapibus ante non sapien facilisis suscipit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed et felis ligula. Sed at mollis est. Cras vestibulum libero ac egestas iaculis. Sed congue nisl sit amet enim tempor sagittis. Donec rhoncus venenatis metus sollicitudin ultrices. Etiam sit amet tincidunt ligula. Proin euismod libero in lorem accumsan, eu lacinia tellus sagittis.";
-		Font f = new Font("SansSerif", Font.PLAIN, 12);
-    	double largeurBlocReel = 481.9;
-    	System.out.println(niceParagraph(f,lorem,largeurBlocReel));
-
-	}
 	
 	/**
 	 * @param paragraphe - Paragraphe à mettre en page EN CONSIDERANT UN SEUL ESPACE ENTRE CHAQUE MOT
@@ -42,7 +29,6 @@ public class OptimisationAlgorithme {
 	 */
 	//LARGEURBLOC DOIT ETRE PLUS GRAND QUE LE PLUS GRAND DES MOTS DU PARAGRAPHE
 	public static String niceParagraph(String paragraphe,Polices police,double largeurBloc){
-		HashMap<Character,Double> largeur = police.getLargeurs();
 		if(paragraphe.trim().length()==0) return paragraphe; //paragraphe avec que des blancs.
 		if(paragraphe.isEmpty()) return " ";
 		String[] chaine = chainesdeMots(paragraphe); //chaine[k] : k-ieme mot du paragraphe
@@ -62,13 +48,13 @@ public class OptimisationAlgorithme {
 		int[] p = new int[nombreDeMots + 1]; 
 		//pointeur qui retient les positions des sauts de ligne dans la solution finale.
 		
-		double blank = largeur.get(' ');
+		double blank = police.largeurMot(" ");
 		//largeur en point d'un espace.
 		
 		for (int i = 1; i <= nombreDeMots; i++) { //on remplit le tableau espaces.
-			espaces[i][i] = largeurBloc - largeurMot(chaine[i-1],police); //ligne ne comportant que le i-eme mot
+			espaces[i][i] = largeurBloc - police.largeurMot(chaine[i-1]); //ligne ne comportant que le i-eme mot
 			for (int j = i + 1; j <= nombreDeMots; j++) {
-				espaces[i][j] = espaces[i][j - 1] - largeurMot(" " + chaine[j-1],police);
+				espaces[i][j] = espaces[i][j - 1] - police.largeurMot(" " + chaine[j-1]);
 			}
 		}
 
@@ -104,8 +90,7 @@ public class OptimisationAlgorithme {
 			temp+=chaine[pointeur-1];
 			if (!lastlign && Main.justificationManuelle) {
 				String[] mots = chainesdeMots(temp);
-				int nbrSpace = (int) Math.floor((largeurBloc - largeurMot(temp,
-						police)) / blank);
+				int nbrSpace = (int) Math.floor((largeurBloc - police.largeurMot(temp)) / blank);
 				int nbrBoucle = nbrSpace / (mots.length - 1);
 				int reste = nbrSpace % (mots.length - 1);
 				temp = "";
@@ -174,27 +159,6 @@ public class OptimisationAlgorithme {
 			largeur += temp;
 		}
 		return largeur;
-	}
-	
-	/**
-	 * @param mot - Mot dont on désire la largeur
-	 * @param cara - Tableau donnant pour chaque caractère sa largeur
-	 * @return - Renvoie la largeur du mot
-	 */
-	public static double largeurMot(String mot, Polices police){
-		double temp = 0 ;
-		
-		/**
-		 * On ne calcule plus la largeur des mots en demandant à java de sommer la largeur des caractères
-		 * mais en lui demandant de donner directement la largeur du mot.
-		 */
-//		HashMap<Character, Double> cara = police.getLargeurs();
-//			for(int j=0;j<mot.length();j++){
-//				temp += cara.get(mot.charAt(j));
-//			}
-		
-		temp = (new TextLayout(mot, police.getFont(), Polices.frc)).getAdvance();
-		return temp;
 	}
 	
 
