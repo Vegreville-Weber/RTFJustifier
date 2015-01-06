@@ -292,10 +292,10 @@ public class GUI extends JFrame{
 				System.out.println("La coupure des mots " + ((Main.coupureMots)?"est active" : "n'est pas active"));
 			}
 		});
-		JCheckBox boxJustificationManuelle = new JCheckBox("Justifier en ajoutant des espaces");
+		final JCheckBox boxJustificationManuelle = new JCheckBox("Justifier en ajoutant des espaces");
 		boxJustificationManuelle.setSelected(Main.justificationManuelle);
 		boxJustificationManuelle.setOpaque(false);
-		JCheckBox boxJustificationLogicielle = new JCheckBox("Justification logicielle des lignes");
+		final JCheckBox boxJustificationLogicielle = new JCheckBox("Justification logicielle des lignes");
 		boxJustificationLogicielle.setSelected(Main.justificationLogicielle);
 		boxJustificationLogicielle.setOpaque(false);
 		boxJustificationManuelle.addActionListener(new ActionListener() {
