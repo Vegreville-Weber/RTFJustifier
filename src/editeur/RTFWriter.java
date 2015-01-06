@@ -1,7 +1,6 @@
 package editeur;
 
 
-import java.awt.Font;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -44,15 +43,15 @@ public class RTFWriter { //une fois connues grâce à RTFReader les caractéristiqu
 		}
 		LinkedList<RtfPara> paras = new LinkedList<RtfPara> ();
 		if(Main.justificationLogicielle){
-		for(Paragraphe pa : r.paragraphes){
-			if(pa.fontnum!=-1) paras.add(RtfPara.p(RtfText.font(pa.fontnum,RtfText.fontSize(2*pa.getFontSize(),pa.texte))).alignJustified()); //.alignJustified()
-			else paras.add(RtfPara.p(RtfText.font(r.fontdefault,RtfText.fontSize(2*pa.getFontSize(),pa.texte))).alignJustified());
-		}
+			for(Paragraphe pa : r.paragraphes){
+				if(pa.fontnum!=-1) paras.add(RtfPara.p(RtfText.font(pa.fontnum,RtfText.fontSize(2*pa.getFontSize(),pa.texte))).alignJustified()); //.alignJustified()
+				else paras.add(RtfPara.p(RtfText.font(r.fontdefault,RtfText.fontSize(2*pa.getFontSize(),pa.texte))).alignJustified());
+			}
 		}
 		else{
 			for(Paragraphe pa : r.paragraphes){
-			if(pa.fontnum!=-1) paras.add(RtfPara.p(RtfText.font(pa.fontnum,RtfText.fontSize(2*pa.getFontSize(),pa.texte))));
-			else paras.add(RtfPara.p(RtfText.font(r.fontdefault,RtfText.fontSize(2*pa.getFontSize(),pa.texte))));
+				if(pa.fontnum!=-1) paras.add(RtfPara.p(RtfText.font(pa.fontnum,RtfText.fontSize(2*pa.getFontSize(),pa.texte))));
+				else paras.add(RtfPara.p(RtfText.font(r.fontdefault,RtfText.fontSize(2*pa.getFontSize(),pa.texte))));
 			}
 		}
 		output=output.section(paras);
