@@ -308,17 +308,21 @@ public class GUI extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Main.justificationManuelle = !Main.justificationManuelle;
-				Main.justificationLogicielle = !Main.justificationLogicielle;
-				boxJustificationLogicielle.setSelected(!boxJustificationLogicielle.isSelected());
+				if (boxJustificationLogicielle.isSelected()) {
+					Main.justificationLogicielle = false;
+					boxJustificationLogicielle.setSelected(false);
+				}
 			}
 		});
 		boxJustificationLogicielle.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Main.justificationManuelle = !Main.justificationManuelle;
 				Main.justificationLogicielle = !Main.justificationLogicielle;
-				boxJustificationManuelle.setSelected(!boxJustificationManuelle.isSelected());
+				if (boxJustificationManuelle.isSelected()) {
+					Main.justificationManuelle = false;
+					boxJustificationManuelle.setSelected(false);
+				}
 			}
 		});
 		
