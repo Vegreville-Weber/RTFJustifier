@@ -145,20 +145,33 @@ public class HyphenationAlgorithme {
 				pointeur = p[pointeur]-1;
 			}
 			pointeur = stop.poll();
-			while(run!= null&&!stop.isEmpty()){
-				if(run.place==pointeur&&!run.isHyph){
-					pointeur = stop.poll();
-					restemp=restemp+run.content+"\\line ";
+			if(Main.justificationLogicielle){
+				while(run!= null&&(!stop.isEmpty()||pointeur==nombreDeMots)){
+					if(run.place==pointeur&&!run.isHyph){
+						if(pointeur!=nombreDeMots){
+							pointeur = stop.poll();
+							restemp=restemp+run.content+"\\line ";
+						}
+						else{
+							pointeur=nombreDeMots+1;
+							restemp=restemp+run.content+System.lineSeparator();
+						}
+						
+					}
+					else if(run.place==pointeur&&run.isHyph){
+						restemp = restemp+run.left+"-"+"\\line "+run.right+" ";
+						if(pointeur!=nombreDeMots)pointeur = stop.poll();
+						else pointeur=nombreDeMots+1;
+					}
+					else restemp = restemp+run.content+" ";
+					run = run.next;
 				}
-				else if(run.place==pointeur&&run.isHyph){
-					restemp = restemp+run.left+"-"+"\\line "+run.right+" ";
-					pointeur = stop.poll();
-				}
-				else restemp = restemp+run.content+" ";
-				run = run.next;
+
+				return restemp;
 			}
-			System.out.println(restemp);
-			return restemp;
+			else{
+				return null ;
+			}
 		}
 		
 		/**
