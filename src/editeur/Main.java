@@ -1,5 +1,6 @@
 package editeur;
 
+import java.io.IOException;
 import java.util.LinkedList;
 
 public class Main {
@@ -26,7 +27,12 @@ public class Main {
 			//if (justificationLogicielle==-1) justificationLogicielle=0;
 			if (dest.equals("")) dest=source.replaceAll(".rtf", "-justified.rtf");
 			
-			run(source,dest);
+			try {
+				run(source,dest);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 		}
 		else{
@@ -35,7 +41,7 @@ public class Main {
 		
 	}
 	
-	public static void run(String source, String cible){
+	public static void run(String source, String cible) throws IOException{
 		RTFReader r = new RTFReader(source);
 		r.run();
 		double largeurBloc = (r.paperw-r.marginl-r.marginr)*0.05; // On convertit le TWIP en POINT

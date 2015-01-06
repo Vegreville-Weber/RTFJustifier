@@ -209,7 +209,12 @@ public class GUI extends JFrame{
             	
             	}
  
-            	Main.run(source.getAbsolutePath(), cible.getAbsolutePath());
+            	try {
+					Main.run(source.getAbsolutePath(), cible.getAbsolutePath());
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
             	
             	//Ouvre une fenetre pour indiquer la fin du programme et proposer d'ouvrir le RTF
             	Object[] options = {"Oui","Non"};

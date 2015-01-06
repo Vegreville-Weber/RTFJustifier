@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.font.TextLayout;
 import java.util.HashMap;
 import java.util.LinkedList;
+import static com.tutego.jrtf.Rtf.rtf;
 
 public class OptimisationAlgorithme {
 
@@ -119,10 +120,13 @@ public class OptimisationAlgorithme {
 
 				}
 				temp += mots[mots.length - 1];
+				
 			}
-			else{lastlign=false;}
+			if(!lastlign)temp+="\\line ";
+			else{
+				temp+=System.lineSeparator();
+				lastlign=false;}
 			
-			temp+=System.lineSeparator();
 			resultat = temp+=resultat;
 			pointeur = p[pointeur]-1;
 		}
