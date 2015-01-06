@@ -2,6 +2,7 @@ package editeur;
 
 import java.awt.Font;
 import java.awt.font.TextLayout;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -12,10 +13,14 @@ public class HyphenationAlgorithme {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer turpis mi, dignissim et dignissim vitae, auctor a lectus. Aenean cursus erat ut magna ultrices mollis. Cras turpis urna, tempus tincidunt dictum non, gravida posuere augue. Ut dapibus ante non sapien facilisis suscipit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed et felis ligula. Sed at mollis est. Cras vestibulum libero ac egestas iaculis. Sed congue nisl sit amet enim tempor sagittis. Donec rhoncus venenatis metus sollicitudin ultrices. Etiam sit amet tincidunt ligula. Proin euismod libero in lorem accumsan, eu lacinia tellus sagittis.";
-		Font f = new Font("SansSerif", Font.PLAIN, 12);
-    	double largeurBlocReel = 481.9;
-    	System.out.println(niceParagraph(f,lorem,largeurBlocReel));
+    	Main.justificationManuelle=false;
+		Main.justificationLogicielle=false;
+		try {
+			Main.run("TwoParagraph.rtf","test.rtf");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 		
@@ -39,7 +44,6 @@ public class HyphenationAlgorithme {
 		 */
 		//LARGEURBLOC DOIT ETRE PLUS GRAND QUE LE PLUS GRAND DES MOTS DU PARAGRAPHE
 		public static String niceParagraph(String paragraphe,Polices police,double largeurBloc){
-			HashMap<Character,Double> largeur = police.getLargeurs();
 			if(paragraphe.trim().length()==0) return paragraphe; //paragraphe avec que des blancs.
 			if(paragraphe.isEmpty()) return " ";
 			String[] chaine = chainesdeMots(paragraphe); //chaine[k] : k-ieme mot du paragraphe
@@ -65,8 +69,8 @@ public class HyphenationAlgorithme {
 			int[] p = new int[nombreDeMots + 1]; 
 			//pointeur qui retient les positions des sauts de ligne dans la solution finale.
 			
-			double blank = largeur.get(' ');
-			//largeur en point d'un espace.
+			
+			
 			
 			for (int i = 1; i <= nombreDeMots; i++) { //on remplit le tableau espaces.
 				espaces[i][i] = largeurBloc - largeurMot(chaine[i-1],police); //ligne ne comportant que le i-eme mot
@@ -100,17 +104,17 @@ public class HyphenationAlgorithme {
 					int size = content.length();
 					if(size>4){
 						String left = content.substring(0,size/2);
-						String right = content.substring((size/2)+1,size-1);
+						String right = content.substring((size/2),size);
 						double espace = espaces[i][j - 1] - largeurMot(" " + left+"-",police);
 						double cost;
 						if(espace <0 || j==nombreDeMots) cost=INFINI;
-						else cost = espace*espace*espace +5;//penalité de 5
+						else cost = espace*espace*espace +10000;//penalité
 						if(costFinal[i-1]!=INFINI&&cost!=INFINI&&(costFinal[i-1]+cost<costFinal[j])){
 							temp.isHyph=true;
 							temp.left=left;
 							temp.right=right;
 							costFinal[j] = costFinal[i-1] +cost;
-							espaces[j+1][j+1] = espaces[j+1][j+1]- largeurMot(" -"+right,police);
+							espaces[j+1][j+1] = espaces[j+1][j+1]- largeurMot(right,police);
 							for (int k = j + 2; k <= nombreDeMots; k++) {
 								espaces[j+1][k] = espaces[j+1][k - 1] - largeurMot(" " + chaine[k-1],police);
 							}
@@ -132,7 +136,6 @@ public class HyphenationAlgorithme {
 				}
 				temp = temp.next;
 			}
-			String resultat = new String();
 			String restemp = new String();
 			Mots run = init;
 			LinkedList<Integer> stop = new LinkedList<Integer>();
@@ -140,23 +143,35 @@ public class HyphenationAlgorithme {
 			while(pointeur!=0){
 				stop.addFirst(pointeur);
 				pointeur = p[pointeur]-1;
-				System.out.println(pointeur);
 			}
 			pointeur = stop.poll();
-			while(run!= null&&!stop.isEmpty()){
-				if(run.place==pointeur&&!run.isHyph){
-					pointeur = stop.poll();
-					restemp=restemp+run.content+System.lineSeparator();
+			if(Main.justificationLogicielle){
+				while(run!= null&&(!stop.isEmpty()||pointeur==nombreDeMots)){
+					if(run.place==pointeur&&!run.isHyph){
+						if(pointeur!=nombreDeMots){
+							pointeur = stop.poll();
+							restemp=restemp+run.content+"\\line ";
+						}
+						else{
+							pointeur=nombreDeMots+1;
+							restemp=restemp+run.content+System.lineSeparator();
+						}
+						
+					}
+					else if(run.place==pointeur&&run.isHyph){
+						restemp = restemp+run.left+"-"+"\\line "+run.right+" ";
+						if(pointeur!=nombreDeMots)pointeur = stop.poll();
+						else pointeur=nombreDeMots+1;
+					}
+					else restemp = restemp+run.content+" ";
+					run = run.next;
 				}
-				else if(run.isHyph){
-					restemp = restemp+run.left+"-"+System.lineSeparator()+"-"+run.right+" ";
-					pointeur = stop.poll();
-				}
-				else restemp = restemp+run.content+" ";
-				run = run.next;
+
+				return restemp;
 			}
-			System.out.println(restemp);
-			return resultat;
+			else{
+				return null ;
+			}
 		}
 		
 		/**
@@ -201,7 +216,7 @@ public class HyphenationAlgorithme {
 			}
 			return largeur;
 		}
-		
+	
 		/**
 		 * @param mot - Mot dont on désire la largeur
 		 * @param cara - Tableau donnant pour chaque caractère sa largeur
