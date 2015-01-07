@@ -73,9 +73,9 @@ public class HyphenationAlgorithme {
 			
 			
 			for (int i = 1; i <= nombreDeMots; i++) { //on remplit le tableau espaces.
-				espaces[i][i] = largeurBloc - largeurMot(chaine[i-1],police); //ligne ne comportant que le i-eme mot
+				espaces[i][i] = largeurBloc - police.largeurMot(chaine[i-1]); //ligne ne comportant que le i-eme mot
 				for (int j = i + 1; j <= nombreDeMots; j++) {
-					espaces[i][j] = espaces[i][j - 1] - largeurMot(" " + chaine[j-1],police);
+					espaces[i][j] = espaces[i][j - 1] - police.largeurMot(" " + chaine[j-1]);
 				}
 			}
 
@@ -105,7 +105,7 @@ public class HyphenationAlgorithme {
 					if(size>4){
 						String left = content.substring(0,size/2);
 						String right = content.substring((size/2),size);
-						double espace = espaces[i][j - 1] - largeurMot(" " + left+"-",police);
+						double espace = espaces[i][j - 1] - police.largeurMot(" " + left+"-");
 						double cost;
 						if(espace <0 || j==nombreDeMots) cost=INFINI;
 						else cost = espace*espace*espace +10000;//penalité
@@ -114,9 +114,9 @@ public class HyphenationAlgorithme {
 							temp.left=left;
 							temp.right=right;
 							costFinal[j] = costFinal[i-1] +cost;
-							espaces[j+1][j+1] = espaces[j+1][j+1]- largeurMot(right,police);
+							espaces[j+1][j+1] = espaces[j+1][j+1]- police.largeurMot(right);
 							for (int k = j + 2; k <= nombreDeMots; k++) {
-								espaces[j+1][k] = espaces[j+1][k - 1] - largeurMot(" " + chaine[k-1],police);
+								espaces[j+1][k] = espaces[j+1][k - 1] - police.largeurMot(" " + chaine[k-1]);
 							}
 							p[j] = i;
 							for (int s = 1; s <= nombreDeMots; s++) { //on remplit le tableau costs.
@@ -136,6 +136,7 @@ public class HyphenationAlgorithme {
 				}
 				temp = temp.next;
 			}
+			double blank = police.largeurMot(" ");
 			String restemp = new String();
 			Mots run = init;
 			LinkedList<Integer> stop = new LinkedList<Integer>();
@@ -145,7 +146,59 @@ public class HyphenationAlgorithme {
 				pointeur = p[pointeur]-1;
 			}
 			pointeur = stop.poll();
-			if(Main.justificationLogicielle){
+			if(Main.justificationManuelle){
+				boolean isLastWordHyph = false;
+				String inCaseHyph="";
+				String resultat = "";
+				while(run!= null&&(!stop.isEmpty()||pointeur==nombreDeMots)){
+					String ligne = "";
+					if(isLastWordHyph)ligne+=inCaseHyph+" ";
+					while(run.place!=pointeur){
+						ligne+=run.content+" ";
+						run=run.next;
+					}
+					if(run.isHyph){
+						ligne += run.left+"-";
+						inCaseHyph = run.right;
+						isLastWordHyph = true;
+					}
+					else {
+						ligne += run.content;
+						inCaseHyph = "";
+						isLastWordHyph = false;
+					}
+					
+					if(pointeur!=nombreDeMots){
+						String[] mots = chainesdeMots(ligne);
+						int nbrSpace = (int) Math.floor((largeurBloc - police.largeurMot(ligne)) / blank);
+						int nbrBoucle = nbrSpace / (mots.length - 1);
+						int reste = nbrSpace % (mots.length - 1);
+						ligne = "";
+						for (int i = 0; i < mots.length - 1; i++) {
+							ligne += mots[i];
+							for (int j = 0; j <= nbrBoucle; j++)
+								ligne += " ";
+							if (reste > 0) {
+								ligne += " ";
+								reste--;
+							}
+
+						}
+						ligne += mots[mots.length - 1];
+						ligne+="\\line ";
+						
+					}
+					else{
+						ligne += System.lineSeparator();
+					}
+					resultat += ligne;
+					if(pointeur!=nombreDeMots)pointeur = stop.poll();
+					else pointeur += 1 ;
+					run = run.next;
+				}
+				return resultat;
+			}
+			else{
 				while(run!= null&&(!stop.isEmpty()||pointeur==nombreDeMots)){
 					if(run.place==pointeur&&!run.isHyph){
 						if(pointeur!=nombreDeMots){
@@ -168,9 +221,6 @@ public class HyphenationAlgorithme {
 				}
 
 				return restemp;
-			}
-			else{
-				return null ;
 			}
 		}
 		
@@ -222,21 +272,5 @@ public class HyphenationAlgorithme {
 		 * @param cara - Tableau donnant pour chaque caractère sa largeur
 		 * @return - Renvoie la largeur du mot
 		 */
-		public static double largeurMot(String mot, Polices police){
-			double temp = 0 ;
-			
-			/**
-			 * On ne calcule plus la largeur des mots en demandant à java de sommer la largeur des caractères
-			 * mais en lui demandant de donner directement la largeur du mot.
-			 */
-//			HashMap<Character, Double> cara = police.getLargeurs();
-//				for(int j=0;j<mot.length();j++){
-//					temp += cara.get(mot.charAt(j));
-//				}
-			
-			temp = (new TextLayout(mot, police.getFont(), Polices.frc)).getAdvance();
-			return temp;
-		}
-
 
 }
