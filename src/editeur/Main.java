@@ -6,14 +6,17 @@ import java.util.LinkedList;
 public class Main {
 
 	public static boolean justificationManuelle = false; //justification par ajout d'espaces
-	public static boolean justificationLogicielle = false; //demande au logiciel de justifier les lignes
-	public static boolean coupureMots= false; //autorise la coupure de mots (l'hyphenation) ou pas
+	public static boolean justificationLogicielle = true; //demande au logiciel de justifier les lignes
+	public static boolean coupureMots= true; //autorise la coupure de mots (l'hyphenation) ou pas
 	
 	public static void main(String[] args) {
 		//Si le logiciel est executé en ligne de commande
 		if(args.length>=1){
 			String source="";
 			String dest="";
+			justificationLogicielle=false;
+			justificationManuelle=false;
+			coupureMots=false;
 			boolean parametreJustification =false;
 			for (int i = 0; i<args.length; i++){
 				if(args[i].equals("-mj")) {
@@ -41,7 +44,7 @@ public class Main {
 			}
 			
 		}
-		//en l'absence d'arguments on demarre l'interface graphique
+		//en l'absence d'arguments on démarre l'interface graphique
 		else{
 			GUI gui= new GUI();
 		}
@@ -52,14 +55,21 @@ public class Main {
 		RTFReader r = new RTFReader(source);
 		r.run();
 		double largeurBloc = (r.paperw-r.marginl-r.marginr)*0.05; // On convertit le TWIP en POINT
-		//System.out.println(largeurBloc);
 		LinkedList<Paragraphe> newparagraphes = new LinkedList<Paragraphe>();
 		for (Paragraphe p : r.paragraphes){
 			String newpara;
+			
+			double securite = new Polices(p.font).largeurMot("i");
+			// On prend une sécurité sur la largeur maximale d'une ligne pour
+			// compenser les erreurs d'evaluation entre Java et LibreOffice. 
+			// On prend la taille du caractère "i" car ca correspond, en moyenne,
+			// au plus petit caractère de chaque police, et qui suffit à se 
+			// prémunir des erreurs d'évaluation.
+			
 			if(Main.coupureMots)
-				newpara = HyphenationAlgorithme.niceParagraph(p.font, p.texte, largeurBloc);
+				newpara = HyphenationAlgorithme.niceParagraph(p.font, p.texte, largeurBloc-securite);
 			else
-				newpara = OptimisationAlgorithme.niceParagraph(p.font, p.texte, largeurBloc);	
+				newpara = OptimisationAlgorithme.niceParagraph(p.font, p.texte, largeurBloc-securite);	
 			Paragraphe temp = new Paragraphe(newpara,p.font,p.fontnum);
 			newparagraphes.add(temp);				
 		}

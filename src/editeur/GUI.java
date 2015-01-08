@@ -9,14 +9,17 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -38,7 +41,7 @@ public class GUI extends JFrame{
 	}
 	public GUI(){
 		super();
- 
+		
 		build();//On initialise notre fenêtre
 		this.setContentPane(buildContentPane());
 		this.setVisible(true);
@@ -50,6 +53,7 @@ public class GUI extends JFrame{
 		setLocationRelativeTo(null); //centrage de la fenêtre sur l'écran
 		setResizable(false); //On interdit la redimensionnement de la fenêtre
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //l'application se ferme lorsqu'on ferme la fenêtre
+		setIconImage(new ImageIcon("images"+File.separator+"RTF.png").getImage()); //On defini l'icone de l'application
 	}
 	
 	private JPanel buildContentPane(){
@@ -102,7 +106,7 @@ public class GUI extends JFrame{
 		JPanel panelLabelCible = new JPanel();
 		panelLabelCible.setOpaque(false);
 		panelLabelCible.setLayout(new FlowLayout(FlowLayout.LEFT));
-		panelLabelCible.setBorder(BorderFactory.createTitledBorder("Fichier Cible"));
+		panelLabelCible.setBorder(BorderFactory.createTitledBorder("Fichier Cible (facultatif)"));
 		
 		final JLabel labelCible  = new JLabel("Pas de fichier cible");
 		panelLabelCible.add(labelCible);
@@ -317,8 +321,7 @@ public class GUI extends JFrame{
  	   label.setText(path);
  	   int taille = label.getFontMetrics(label.getFont()).stringWidth(path);
  	   boolean alreadyCut = false; //savoir si on est deja rentré dans la boucle pour savoir si on enleve de suite le ...\
- 	   String separator  = "\\"; //la variable separator sert à ne pas avoir une boucle propre à un système d'exploitation - Par défaut cas windows.
- 	   if(path.contains("/")) separator = "/"; //cas Unix
+ 	   String separator  = File.separator; //la variable separator sert à ne pas avoir une boucle propre à un système d'exploitation - Par défaut cas windows.
  	   while (taille > 325){ 
  		   String[] paths;
  		   if(alreadyCut){ //si on a deja ajouté .../ on l'enleve.
