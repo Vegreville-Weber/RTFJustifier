@@ -2,23 +2,19 @@ package editeur;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
 import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
@@ -34,10 +30,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JWindow;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
  
 public class GUI extends JFrame{
@@ -50,6 +43,7 @@ public class GUI extends JFrame{
 	public static void main(String[] args) {
 		GUI gui= new GUI();
 	}
+	
 	public GUI(){
 		super();
 		
@@ -67,6 +61,10 @@ public class GUI extends JFrame{
 		setIconImage(new ImageIcon("images"+File.separator+"RTF.png").getImage()); //On defini l'icone de l'application
 	}
 	
+	/**
+	 * Construit toute la fenêtre principale et ce qui en dépend
+	 * @return Le JPanel
+	 */
 	private JPanel buildContentPane(){
 		JPanel backPanel = new JPanel();
 		backPanel.setLayout(new BoxLayout(backPanel, BoxLayout.Y_AXIS));
@@ -261,6 +259,7 @@ public class GUI extends JFrame{
 		
 		return backPanel;
 	}
+
 	/**
 	 * Définit la composition de la fenetre des réglages avancés
 	 */
@@ -324,6 +323,9 @@ public class GUI extends JFrame{
 		reglagesAvances.setContentPane(backPanel2);
 	}
 
+	/**
+	 * Définit la composition de la fenetre des informations utiles
+	 */
 	private void initInformationsUtiles(){
 		informationsUtiles = new JFrame();
 		informationsUtiles.setTitle("Informations Utiles");
