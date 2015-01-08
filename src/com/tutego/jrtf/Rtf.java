@@ -98,7 +98,7 @@ public class Rtf
       char c = rawText.charAt( i ); 
       if ( c == '\n' )
         out.append( "\\par\n" );
-      else if(isNewLine){
+      else if(isNewLine){  // Modification pour que cette librairie effectue bien des sauts de lignes et non pas des nouveaux paragraphes
     	  if(i<rawText.length()-3&&rawText.substring(i,i+4).equals("line")){ 
     		  out.append("\\line");
     		  i=i+3;

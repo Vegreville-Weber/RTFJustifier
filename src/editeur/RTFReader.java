@@ -13,14 +13,14 @@ import java.util.regex.Pattern;
 
 
 
-public class RTFReader { //classe utilisï¿½ pour retenir toutes les informations utiles lors de la lecture de la source
-	LinkedList<Paragraphe> paragraphes ; //paragraphes prï¿½sents dans la source.
+public class RTFReader { //classe utilisée pour retenir toutes les informations utiles lors de la lecture de la source
+	LinkedList<Paragraphe> paragraphes ; //paragraphes présents dans la source.
 	String path; //chemin de la source.
-	HashMap<Integer,String> fontnames; //polices dï¿½clarï¿½es au dï¿½but de la source
+	HashMap<Integer,String> fontnames; //polices déclarées au début de la source
 	double paperh,paperw,marginr,marginl,margint,marginb; //hauteur(h),largeur(w) et marges(right,left,top,bottom) 
-	//ATTENTION : hauteur,largeur et marges sont en TWIP, unitï¿½ utilisï¿½e par le format RTF.
+	//ATTENTION : hauteur,largeur et marges sont en TWIP, unitée utilisée par le format RTF.
 	int fontdefault;
-	//indice de la police dï¿½clarï¿½e comme police par dï¿½faut par la source.
+	//indice de la police déclarée comme police par défaut par la source.
 	
 	
 	public static void main(String[] args) {
@@ -88,7 +88,7 @@ public class RTFReader { //classe utilisï¿½ pour retenir toutes les informations
 					this.searchMargins(line); //fonction traitant la ligne pour y trouver les marges utilsiï¿½es
 					System.out.println(" margint :"+this.margint+" marginb :"+this.marginb+" marginr :"+this.marginr+" marginl :"+this.marginl);
 				}
-				if(line.contains("\\pard")){ ////cas oï¿½ on est en train de lire la ligne qui dï¿½clare un nouveau paragraphe
+				if(line.contains("\\pard")){ ////cas où on est en train de lire la ligne qui dï¿½clare un nouveau paragraphe
 					String[] lines= line.split("ltrch");
 					String info[] = lines[lines.length-1].split("loch");
 					System.out.println(info.length);

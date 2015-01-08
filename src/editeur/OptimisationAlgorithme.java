@@ -1,25 +1,8 @@
 package editeur;
 
-import java.awt.Font;
-import java.awt.font.TextLayout;
-import java.util.HashMap;
-import java.util.LinkedList;
-import static com.tutego.jrtf.Rtf.rtf;
-
 public class OptimisationAlgorithme {
 
-	private static final double INFINI = Double.MAX_VALUE;
-	
-	/**
-	 * @param paragraphe - Paragraphe à mettre en page EN CONSIDERANT UN SEUL ESPACE ENTRE CHAQUE MOT
-	 * @param largeur - Tableau donnant pour chaque caractère (ESPACE BLANC inclus) la largeur du caractère
-	 * @param largeurBloc - Largeur du bloc où on écrit le paragraphe. en point PS
-	 * @return - Renvoie le paragraphe mis en page
-	 */
-	public static String niceParagraph(Font f, String paragraphe,double largeurBloc){
-		Polices pol = new Polices(f);
-    	return niceParagraph(paragraphe,pol,largeurBloc);
-	}
+	private static final double INFINI = Double.MAX_VALUE;	
 	
 	/**
 	 * @param paragraphe - Paragraphe à mettre en page EN CONSIDERANT UN SEUL ESPACE ENTRE CHAQUE MOT
@@ -28,7 +11,7 @@ public class OptimisationAlgorithme {
 	 * @return - Renvoie le paragraphe mis en page
 	 */
 	//LARGEURBLOC DOIT ETRE PLUS GRAND QUE LE PLUS GRAND DES MOTS DU PARAGRAPHE
-	public static String niceParagraph(String paragraphe,Polices police,double largeurBloc){
+	public static String niceParagraph(Polices police,String paragraphe,double largeurBloc){
 		
 		if(paragraphe.trim().length()==0) return paragraphe; //paragraphe avec que des blancs.
 		if(paragraphe.isEmpty()) return " ";
@@ -81,6 +64,7 @@ public class OptimisationAlgorithme {
 				}
 			}
 		}
+		//construction du résultat final.
 		String resultat = new String();
 		int pointeur = nombreDeMots;
 		boolean lastlign=true;
@@ -147,21 +131,4 @@ public class OptimisationAlgorithme {
 			for(int k=0;k<resultFinal.length;k++) resultFinal[k]=result[k];}
 		return resultFinal;
 	}
-	
-	/**
-	 * @param chaine - Chaine de mots présents dans le paragraphe
-	 * @param cara - Tableau donnant pour chaque caractère sa largeur
-	 * @return - Renvoie la largeur totale du paragraphe.
-	 */
-	public static double largeurParagraphe(String[] chaine, double[] cara){
-		double largeur = 0 ;
-		for (int k =0;k<chaine.length;k++) {
-			double temp=0;
-			for(int j=0;j<chaine[k].length();j++) temp += cara[chaine[k].charAt(j)];
-			largeur += temp;
-		}
-		return largeur;
-	}
-	
-
 }

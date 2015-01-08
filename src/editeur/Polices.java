@@ -19,10 +19,10 @@ public class Polices{
     	this.font = font; 
     }
     
-    /**
-	 * @param mot - Mot dont on désire la largeur
-	 * @param cara - Tableau donnant pour chaque caractère sa largeur
-	 * @return - Renvoie la largeur du mot
+  
+	/** Renvoie la largeur du mot dans la police considée.
+	 * @param mot
+	 * @return
 	 */
 	public double largeurMot(String mot){
 		return (new TextLayout(mot, this.getFont(), frc)).getAdvance();
