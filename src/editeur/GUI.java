@@ -179,10 +179,7 @@ public class GUI extends JFrame{
             		return;
             	}
             	if(cible==null){
-            		String separator  = "\\"; //la variable separator sert à ne pas avoir une boucle propre à un système d'exploitation - Par défaut cas windows.
-             	   	if(source.getAbsolutePath().contains("/")) separator = "/"; //cas Unix
-             	   	System.out.println(source.getAbsolutePath());
-             	   	String names[]=source.getAbsolutePath().split(Pattern.quote(separator));
+             	   	String names[]=source.getAbsolutePath().split(File.separator);
             		JOptionPane.showMessageDialog(null, "Vous n'avez pas choisi de fichier cible!\nLe fichier écrit sera " +names[names.length-1].replaceAll(".rtf", "-justified.rtf") );
             		cible = new File(source.getAbsolutePath().replaceAll(".rtf", "-justified.rtf"));
             		setRightPath(labelCible, cible.getAbsolutePath());
