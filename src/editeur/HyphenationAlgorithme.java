@@ -71,18 +71,24 @@ public class HyphenationAlgorithme {
 			Mots temp = init;
 			for (int j = 1; j <= nombreDeMots; j++) {
 				costFinal[j] = INFINI;
+				boolean isCutable = false;
+				String left ="",right="",content ="";
+				if(temp.cut!=-1){
+					int cut = temp.cut;
+					content = temp.content;
+					int size = content.length();
+					left = content.substring(0,cut);
+					right = content.substring(cut,size);
+					isCutable=true;
+				}
 				for (int i = 1; i <= j; i++) {
 					if (costFinal[i-1] != INFINI && costs[i][j] != INFINI && (costFinal[i-1] + costs[i][j] < costFinal[j])) {
 						costFinal[j] = costFinal[i - 1] + costs[i][j];
 						p[j] = i; //on retient le saut de ligne.
 						temp.isEnd=true;
 					}
-					String content = temp.content;
-					int size = content.length();
-					if(temp.cut!=-1){
-						int cut = temp.cut;
-						String left = content.substring(0,cut);
-						String right = content.substring(cut,size);
+					
+					if(isCutable){
 						double espace = espaces[i][j - 1] - police.largeurMot(" " + left+"-");
 						double cost;
 						if(espace <0 || j==nombreDeMots) cost=INFINI;
