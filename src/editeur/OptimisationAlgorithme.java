@@ -28,7 +28,8 @@ public class OptimisationAlgorithme {
 	 * @return - Renvoie le paragraphe mis en page
 	 */
 	//LARGEURBLOC DOIT ETRE PLUS GRAND QUE LE PLUS GRAND DES MOTS DU PARAGRAPHE
-	public static String niceParagraph(String paragraphe,Polices police,double largeurBloc){
+	public static String niceParagraph(String paragraphe,Polices police,double largeurBlocTheorique){
+		
 		if(paragraphe.trim().length()==0) return paragraphe; //paragraphe avec que des blancs.
 		if(paragraphe.isEmpty()) return " ";
 		String[] chaine = chainesdeMots(paragraphe); //chaine[k] : k-ieme mot du paragraphe
@@ -50,6 +51,11 @@ public class OptimisationAlgorithme {
 		
 		double blank = police.largeurMot(" ");
 		//largeur en point d'un espace.
+		
+		double largeurBloc = largeurBlocTheorique - police.largeurMot("i");
+		//On prend une sécurité sur la largeur maximale d'une ligne pour compenser les erreurs d'evaluation entre
+		//Java et LibreOffice. On prend la taille du caractère "i" car ca correspond, en moyenne, au plus petit
+		//caractère de chaque police, et qui suffit à se prémunir des erreurs d'évaluation.
 		
 		for (int i = 1; i <= nombreDeMots; i++) { //on remplit le tableau espaces.
 			espaces[i][i] = largeurBloc - police.largeurMot(chaine[i-1]); //ligne ne comportant que le i-eme mot

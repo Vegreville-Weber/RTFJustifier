@@ -91,41 +91,7 @@ public class GUI extends JFrame{
 		panel.add(panelLabelSource,c);
 		
 		JButton boutonSource = new JButton("Choisir le fichier source");
-		boutonSource.addActionListener(new ActionListener() {
-			 
-            public void actionPerformed(ActionEvent e)
-            {
-            	JFileChooser chooser = new JFileChooser();
-            	chooser.setFileFilter(new FileNameExtensionFilter(".rtf", "rtf")); 
-            	chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            	int option = chooser.showOpenDialog(new JFrame());
-            	if (option == JFileChooser.APPROVE_OPTION) {
-            	   source = chooser.getSelectedFile();
-            	   String path = source.getAbsolutePath();
-            	   System.out.println(path);
-            	   labelSource.setText(path);
-            	   int taille = labelSource.getFontMetrics(labelSource.getFont()).stringWidth(path);
-            	   boolean alreadyCut = false; //savoir si on est deja rentré dans la boucle pour savoir si on enleve de suite le ...\
-            	   String separator  = "\\"; //la variable separator sert à ne pas avoir une boucle propre à un système d'exploitation - Par défaut cas windows.
-            	   if(path.contains("/")) separator = "/"; //cas Unix
-            	   while (taille > 325){ 
-            		   String[] paths;
-            		   if(alreadyCut){ //si on a deja ajouté .../ on l'enleve.
-            			   path = path.split(Pattern.quote(separator),2)[1];
-            		   }
-            		   if(path.contains(separator)) paths= path.split(Pattern.quote(separator), 2); //Le Pattern.quote sert à corriger un bug du au fait qu'on peut pas spliter une string selon un backslash
-            		   else break;  // si il reste rien à couper, tant pis.
-            		   path = "..."+separator + paths[1];
-            		   labelSource.setText(path);
-            		   taille = labelSource.getFontMetrics(labelSource.getFont()).stringWidth(path);            		   
-            		   alreadyCut=true;
-            		   
-            	   }
-            
-            	}
-            	
-            }
-        });
+		
 		c.weightx=0;
 		c.insets= new Insets(0, 0, 30, 0);
 		c.gridwidth=1;
@@ -147,6 +113,26 @@ public class GUI extends JFrame{
 		panel.add(panelLabelCible, c);
 		
 		JButton boutonCible = new JButton("Choisir le fichier cible");
+		boutonSource.addActionListener(new ActionListener() {
+			 
+            public void actionPerformed(ActionEvent e)
+            {
+            	JFileChooser chooser = new JFileChooser();
+            	chooser.setFileFilter(new FileNameExtensionFilter(".rtf", "rtf")); 
+            	chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            	int option = chooser.showOpenDialog(new JFrame());
+            	if (option == JFileChooser.APPROVE_OPTION) {
+            	   source = chooser.getSelectedFile();
+            	   setRightPath(labelSource, source.getAbsolutePath());  
+            	   
+            	   //On réinitialise la cible
+            	   cible=null;
+            	   labelCible.setText("Pas de fichier cible");
+            
+            	}
+            	
+            }
+        });
 		boutonCible.addActionListener(new ActionListener() {
 			 
             public void actionPerformed(ActionEvent e)
@@ -157,26 +143,7 @@ public class GUI extends JFrame{
             	int option = chooser.showOpenDialog(new JFrame());
             	if (option == JFileChooser.APPROVE_OPTION) {
             	   cible = chooser.getSelectedFile();
-            	   String path = cible.getAbsolutePath();
-            	   labelCible.setText(path);
-            	   int taille = labelCible.getFontMetrics(labelCible.getFont()).stringWidth(path);
-            	   boolean alreadyCut = false; //savoir si on est deja rentré dans la boucle pour savoir si on enleve de suite le ...\
-            	   String separator  = "\\"; //la variable separator sert à ne pas avoir une boucle propre à un système d'exploitation - Par défaut cas windows.
-            	   if(path.contains("/")) separator = "/"; //cas Unix
-            	   while (taille > 325){ 
-            		   String[] paths;
-            		   if(alreadyCut){ //si on a deja ajouté .../ on l'enleve.
-            			   path = path.split(Pattern.quote(separator),2)[1];
-            		   }
-            		   if(path.contains(separator)) paths= path.split(Pattern.quote(separator), 2); //Le Pattern.quote sert à corriger un bug du au fait qu'on peut pas spliter une string selon un backslash
-            		   else break;  // si il reste rien à couper, tant pis.
-            		   path = "..."+separator + paths[1];
-            		   labelCible.setText(path);
-            		   taille = labelCible.getFontMetrics(labelCible.getFont()).stringWidth(path);            		   
-            		   alreadyCut=true;
-            		   
-            	   }
-            	                 	
+            	   setRightPath(labelCible, cible.getAbsolutePath());                	
             	}
             	
             }
@@ -202,7 +169,7 @@ public class GUI extends JFrame{
              	   	String names[]=source.getAbsolutePath().split(separator);
             		JOptionPane.showMessageDialog(null, "Vous n'avez pas choisi de fichier cible!\nLe fichier écrit sera " +names[names.length-1].replaceAll(".rtf", "-justified.rtf") );
             		cible = new File(source.getAbsolutePath().replaceAll(".rtf", "-justified.rtf"));
-            	
+            		setRightPath(labelCible, cible.getAbsolutePath());
             	}
  
             	try {
@@ -223,6 +190,8 @@ public class GUI extends JFrame{
             		    options,  //the titles of buttons
             		    options[0]); //default button title
             	if (choixOuvrir==0) open(cible);
+            	
+            	
             }
         });
 		c.insets = new Insets(40, 0, 0, 0);
@@ -336,5 +305,32 @@ public class GUI extends JFrame{
 		Desktop dt = Desktop.getDesktop();
 	    dt.open(document);}
 	   catch(IOException e1){}
+	}
+	/**
+	 * Modifier le chemin d'accès affiché dans le label pour qu'il ne soit pas coupé
+	 * dans la fenêtre
+	 * @param label Le Jlabel sur lequel on souhaite appliquer le chemin
+	 * @param path le chemin complet qui sera aménagé
+	 */
+	private static void setRightPath(JLabel label, String path){
+
+ 	   label.setText(path);
+ 	   int taille = label.getFontMetrics(label.getFont()).stringWidth(path);
+ 	   boolean alreadyCut = false; //savoir si on est deja rentré dans la boucle pour savoir si on enleve de suite le ...\
+ 	   String separator  = "\\"; //la variable separator sert à ne pas avoir une boucle propre à un système d'exploitation - Par défaut cas windows.
+ 	   if(path.contains("/")) separator = "/"; //cas Unix
+ 	   while (taille > 325){ 
+ 		   String[] paths;
+ 		   if(alreadyCut){ //si on a deja ajouté .../ on l'enleve.
+ 			   path = path.split(Pattern.quote(separator),2)[1];
+ 		   }
+ 		   if(path.contains(separator)) paths= path.split(Pattern.quote(separator), 2); //Le Pattern.quote sert à corriger un bug du au fait qu'on peut pas spliter une string selon un backslash
+ 		   else break;  // si il reste rien à couper, tant pis.
+ 		   path = "..."+separator + paths[1];
+ 		   label.setText(path);
+ 		   taille = label.getFontMetrics(label.getFont()).stringWidth(path);            		   
+ 		   alreadyCut=true;
+ 		   
+ 	   }
 	}
 }
