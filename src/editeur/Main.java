@@ -50,31 +50,36 @@ public class Main {
 		}
 		
 	}
-	
+
+	/** Fonction principale du programme qui lit le fichier source, passe l'algorithme choisi dessus
+	 * et écrit le resultat sur le fichier cible.
+	 * @param source Chemin vers le fichier source .rtf
+	 * @param cible Chemin vers le fichier cible .rtf
+	 * @throws IOException
+	 */
 	public static void run(String source, String cible) throws IOException{
 		RTFReader r = new RTFReader(source);
-		r.run();
+		r.run(); //on lit le fichier source et on sauvegarde les informations utiles dans r.
 		double largeurBloc = (r.paperw-r.marginl-r.marginr)*0.05; // On convertit le TWIP en POINT
 		LinkedList<Paragraphe> newparagraphes = new LinkedList<Paragraphe>();
 		for (Paragraphe p : r.paragraphes){
-			String newpara;
-			
+			String newpara;			
 			double securite = new Polices(p.font).largeurMot("i");
 			// On prend une sécurité sur la largeur maximale d'une ligne pour
 			// compenser les erreurs d'evaluation entre Java et LibreOffice. 
 			// On prend la taille du caractère "i" car ca correspond, en moyenne,
 			// au plus petit caractère de chaque police, et qui suffit à se 
 			// prémunir des erreurs d'évaluation.
-			
+			Polices pol = new Polices(p.font);
 			if(Main.coupureMots)
-				newpara = HyphenationAlgorithme.niceParagraph(p.font, p.texte, largeurBloc-securite);
+				newpara = HyphenationAlgorithme.niceParagraph(pol, p.texte, largeurBloc-securite);
 			else
-				newpara = OptimisationAlgorithme.niceParagraph(p.font, p.texte, largeurBloc-securite);	
+				newpara = OptimisationAlgorithme.niceParagraph(pol, p.texte, largeurBloc-securite);	
 			Paragraphe temp = new Paragraphe(newpara,p.font,p.fontnum);
 			newparagraphes.add(temp);				
 		}
-		r.paragraphes=newparagraphes;
-		RTFWriter.writeRTF(r,cible);
+		r.paragraphes=newparagraphes; //on met dans r les nouveaux paragraphes
+		RTFWriter.writeRTF(r,cible); //on écrit le résultat dans le fichier cible.
 	}
 
 }

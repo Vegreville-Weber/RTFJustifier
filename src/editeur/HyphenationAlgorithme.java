@@ -13,31 +13,6 @@ public class HyphenationAlgorithme {
 	private static final String voyelle = "aeiouy";
 	private static final String consomne ="zrtpqsdfghjklmwxcvbn";
 	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-    	Main.justificationManuelle=false;
-		Main.justificationLogicielle=false;
-		try {
-			Main.run("TwoParagraph.rtf","test.rtf");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-		
-		
-		/**
-		 * @param paragraphe - Paragraphe à mettre en page EN CONSIDERANT UN SEUL ESPACE ENTRE CHAQUE MOT
-		 * @param largeur - Tableau donnant pour chaque caractère (ESPACE BLANC inclus) la largeur du caractère
-		 * @param largeurBloc - Largeur du bloc où on écrit le paragraphe. en point PS
-		 * @return - Renvoie le paragraphe mis en page
-		 */
-		public static String niceParagraph(Font f, String paragraphe,double largeurBloc){
-			Polices pol = new Polices(f);
-	    	return niceParagraph(paragraphe,pol,largeurBloc);
-		}
-		
 		/**
 		 * @param paragraphe - Paragraphe à mettre en page EN CONSIDERANT UN SEUL ESPACE ENTRE CHAQUE MOT
 		 * @param largeur - Tableau donnant pour chaque caractère (ESPACE BLANC inclus) la largeur du caractère
@@ -45,10 +20,10 @@ public class HyphenationAlgorithme {
 		 * @return - Renvoie le paragraphe mis en page
 		 */
 		//LARGEURBLOC DOIT ETRE PLUS GRAND QUE LE PLUS GRAND DES MOTS DU PARAGRAPHE
-		public static String niceParagraph(String paragraphe,Polices police,double largeurBloc){
+		public static String niceParagraph(Polices police,String paragraphe,double largeurBloc){
 			if(paragraphe.trim().length()==0) return paragraphe; //paragraphe avec que des blancs.
 			if(paragraphe.isEmpty()) return " ";
-			String[] chaine = chainesdeMots(paragraphe); //chaine[k] : k-ieme mot du paragraphe
+			String[] chaine = OptimisationAlgorithme.chainesdeMots(paragraphe); //chaine[k] : k-ieme mot du paragraphe
 			Mots init = new Mots(chaine[0],1);
 			Mots temprun = init;
 			for(int k = 1; k<chaine.length;k++){
@@ -104,9 +79,8 @@ public class HyphenationAlgorithme {
 					}
 					String content = temp.content;
 					int size = content.length();
-					if(size>4){
-						int cut = coupure(content);
-						if(cut!=-1){
+					if(temp.cut!=-1){
+						int cut = temp.cut;
 						String left = content.substring(0,cut);
 						String right = content.substring(cut,size);
 						double espace = espaces[i][j - 1] - police.largeurMot(" " + left+"-");
@@ -135,7 +109,7 @@ public class HyphenationAlgorithme {
 							}
 						}
 						
-					}
+					
 					}	
 				}
 				temp = temp.next;
@@ -173,7 +147,7 @@ public class HyphenationAlgorithme {
 					}
 					
 					if(pointeur!=nombreDeMots){
-						String[] mots = chainesdeMots(ligne);
+						String[] mots = OptimisationAlgorithme.chainesdeMots(ligne);
 						int nbrSpace = (int) Math.floor((largeurBloc - police.largeurMot(ligne)) / blank);
 						int nbrBoucle = nbrSpace / (mots.length - 1);
 						int reste = nbrSpace % (mots.length - 1);
@@ -228,53 +202,10 @@ public class HyphenationAlgorithme {
 			}
 		}
 		
-		/**
-		 * @param paragraphe - Paragraphe à traiter
-		 * @return - Renvoie un tableau de String qui correspond à chaque mots présents dans le paragraphe. ATTENTION : il n'y a plus les espaces.
-		 */	
-		
-		public static String[] chainesdeMots(String paragraphe){
-			String[] result = new String[paragraphe.length()];
-			int j =0;
-			for(int i = 0;i<paragraphe.length();i++){
-				char temp = paragraphe.charAt(i);
-				if(temp==' '){				
-					j++;								
-				}			
-				else{
-					if(result[j]==null) result[j] = new String();
-					result[j]=result[j].concat(Character.toString(temp));
-					}			
-			}
-			String[] resultFinal;
-			if(result[j]!=null){
-				resultFinal = new String[j+1];
-				for(int k=0;k<resultFinal.length;k++) resultFinal[k]=result[k];}
-			else{
-				resultFinal = new String[j];
-				for(int k=0;k<resultFinal.length;k++) resultFinal[k]=result[k];}
-			return resultFinal;
-		}
-		
-		/**
-		 * @param chaine - Chaine de mots présents dans le paragraphe
-		 * @param cara - Tableau donnant pour chaque caractère sa largeur
-		 * @return - Renvoie la largeur totale du paragraphe.
-		 */
-		public static double largeurParagraphe(String[] chaine, double[] cara){
-			double largeur = 0 ;
-			for (int k =0;k<chaine.length;k++) {
-				double temp=0;
-				for(int j=0;j<chaine[k].length();j++) temp += cara[chaine[k].charAt(j)];
-				largeur += temp;
-			}
-			return largeur;
-		}
-	
-		/**
-		 * @param mot - Mot dont on désire la largeur
-		 * @param cara - Tableau donnant pour chaque caractère sa largeur
-		 * @return - Renvoie la largeur du mot
+
+		/** Donne la position optimale pour couper le mot, renvoie -1 si aucune coupe n'est possible
+		 * @param mot
+		 * @return
 		 */
 		public static int coupure(String mot){
 			int size = mot.length();
