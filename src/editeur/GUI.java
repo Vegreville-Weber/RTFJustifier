@@ -2,38 +2,49 @@ package editeur;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
+import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JWindow;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
  
 public class GUI extends JFrame{
 	static File source = null;
 	static File cible = null;
 	static JFrame reglagesAvances = null;
+	static JFrame informationsUtiles = null;
 	static Color backgroundColor = new Color(245, 245, 245);
 	
 	public static void main(String[] args) {
@@ -208,22 +219,30 @@ public class GUI extends JFrame{
 		backPanel.add(panel);
 		
 		JPanel bottomPanel1 = new JPanel();
-		bottomPanel1.setLayout( new FlowLayout(FlowLayout.RIGHT));
+		bottomPanel1.setLayout( new BoxLayout(bottomPanel1, BoxLayout.LINE_AXIS));
+		bottomPanel1.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
 		bottomPanel1.setMinimumSize(new Dimension(560,100));
 		bottomPanel1.setOpaque(false);
 		
 		JButton boutonAvance = new JButton("Réglages Avancés");
 		boutonAvance.addActionListener(new ActionListener() {
-			
-			@Override
 			public void actionPerformed(ActionEvent e) {
-				//JOptionPane.showMessageDialog(null, "FenÃªtre en construction");
 				reglagesAvances.setVisible(true);
 			}
-			
-			
 		});
 		
+		JButton boutonInfos = new JButton("Informations Utiles");
+		boutonInfos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				informationsUtiles.setVisible(true);
+			}
+		});
+		
+		
+		
+		
+		bottomPanel1.add(boutonInfos);
+		bottomPanel1.add(Box.createHorizontalGlue());
 		bottomPanel1.add(boutonAvance);
 		
 		JPanel bottomPanel2 = new JPanel();
@@ -240,10 +259,13 @@ public class GUI extends JFrame{
 		backPanel.add(bottomPanel2);
 		
 		initReglagesAvances();
+		initInformationsUtiles();
 		
 		return backPanel;
 	}
-	
+	/**
+	 * Définit la composition de la fenetre des réglages avancés
+	 */
 	private void initReglagesAvances(){
 		reglagesAvances = new JFrame();
 		JPanel backPanel2 = new JPanel();
@@ -303,16 +325,59 @@ public class GUI extends JFrame{
 		
 		reglagesAvances.setContentPane(backPanel2);
 	}
+
+	private void initInformationsUtiles(){
+		informationsUtiles = new JFrame();
+		informationsUtiles.setTitle("Informations Utiles");
+		informationsUtiles.setSize(500,300);
+		informationsUtiles.setResizable(false);
+		informationsUtiles.setLocationRelativeTo(null);
+		JPanel backPanelInfos = new JPanel();
+		backPanelInfos.setBackground(backgroundColor);
+		backPanelInfos.setLayout(new BoxLayout(backPanelInfos, BoxLayout.Y_AXIS));
+		backPanelInfos.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+		JEditorPane display = new JEditorPane ();
+		display.setContentType("text/rtf; charset=EUC-JP");
+
+	    try {
+	    	BufferedReader br = new BufferedReader(new FileReader("Informations.rtf"));
+	        StringBuilder sb = new StringBuilder();
+	        String line = br.readLine();
+
+	        while (line != null) {
+	            sb.append(line);
+	            sb.append(System.lineSeparator());
+	            line = br.readLine();
+	        }
+	        display.setText(sb.toString());
+	    } catch (IOException e) {
+			e.printStackTrace();
+		} 
+	    
+		display.setEditable ( false ); // set textArea non-editable
+		JScrollPane scroll = new JScrollPane ( display );
+	 	scroll.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
+	 	
+	 	backPanelInfos.add(scroll);
+	 	informationsUtiles.setContentPane(backPanelInfos);
+	}
 	
+	/**
+	 * Ouvre un document avec l'application associée par défaut.
+	 * Présent ici surtout pour la clarté du code (pas de try/catch..)
+	 * @param document Le document à ouvrir
+	 */
 	public static void open(File document){
 	   try{
 		Desktop dt = Desktop.getDesktop();
 	    dt.open(document);}
 	   catch(IOException e1){}
 	}
+	
 	/**
-	 * Modifier le chemin d'accès affiché dans le label pour qu'il ne soit pas coupé
-	 * dans la fenêtre
+	 * Modifie le chemin d'accès affiché dans le label pour que la fin du chemin
+	 * d'accès ne soit pas coupé.
 	 * @param label Le Jlabel sur lequel on souhaite appliquer le chemin
 	 * @param path le chemin complet qui sera aménagé
 	 */
