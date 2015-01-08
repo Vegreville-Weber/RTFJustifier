@@ -10,6 +10,8 @@ import java.util.LinkedList;
 public class HyphenationAlgorithme {
 
 	private static final double INFINI = Double.MAX_VALUE;
+	private static final String voyelle = "aeiouy";
+	private static final String consomne ="zrtpqsdfghjklmwxcvbn";
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -103,8 +105,10 @@ public class HyphenationAlgorithme {
 					String content = temp.content;
 					int size = content.length();
 					if(size>4){
-						String left = content.substring(0,size/2);
-						String right = content.substring((size/2),size);
+						int cut = coupure(content);
+						if(cut!=-1){
+						String left = content.substring(0,cut);
+						String right = content.substring(cut,size);
 						double espace = espaces[i][j - 1] - police.largeurMot(" " + left+"-");
 						double cost;
 						if(espace <0 || j==nombreDeMots) cost=INFINI;
@@ -132,7 +136,7 @@ public class HyphenationAlgorithme {
 						}
 						
 					}
-							
+					}	
 				}
 				temp = temp.next;
 			}
@@ -272,5 +276,25 @@ public class HyphenationAlgorithme {
 		 * @param cara - Tableau donnant pour chaque caractère sa largeur
 		 * @return - Renvoie la largeur du mot
 		 */
-
+		public static int coupure(String mot){
+			int size = mot.length();
+			int i = -1;
+			boolean isVoyelle = false;
+			boolean isCutWrong = true;
+			for(int k = 0 ; k<size;k++){
+				char c = mot.charAt(k);
+				if(voyelle.contains(c+"")){
+					isVoyelle = true;
+				}
+				else if (consomne.contains(c+"")){
+				
+					if(((!isVoyelle&&!isCutWrong&&Math.abs(i-size/2)>Math.abs(k-size/2))||(isCutWrong&&Math.abs(i-size/2)>Math.abs(k-size/2))||(!isVoyelle&&isCutWrong))&&(k>1&&size-k>1)){
+						i=k;
+						if(!isVoyelle) isCutWrong = false;
+						isVoyelle = false;
+					}
+				}
+			}
+			return i;
+		}
 }
