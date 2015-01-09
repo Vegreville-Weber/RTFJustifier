@@ -20,7 +20,7 @@ public class Polices{
     }
     
   
-	/** Renvoie la largeur du mot dans la police considée.
+	/** Renvoie la largeur du mot dans la police considérée.
 	 * @param mot
 	 * @return
 	 */

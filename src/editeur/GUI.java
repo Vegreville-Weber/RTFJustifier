@@ -186,7 +186,6 @@ public class GUI extends JFrame{
             	try {
 					Main.run(source.getAbsolutePath(), cible.getAbsolutePath());
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
             	
@@ -344,12 +343,14 @@ public class GUI extends JFrame{
 	    	BufferedReader br = new BufferedReader(new FileReader("Informations.rtf"));
 	        StringBuilder sb = new StringBuilder();
 	        String line = br.readLine();
-
+	    
 	        while (line != null) {
 	            sb.append(line);
 	            sb.append(System.lineSeparator());
 	            line = br.readLine();
 	        }
+	        br.close();
+	        
 	        display.setText(sb.toString());
 	    } catch (IOException e) {
 			e.printStackTrace();

@@ -114,7 +114,7 @@ public class OptimisationAlgorithme {
 		int j =0;
 		for(int i = 0;i<paragraphe.length();i++){
 			char temp = paragraphe.charAt(i);
-			if(temp==' '){				
+			if(temp==' ' && result[j]!=null){ //pour éviter les espaces multiples			
 				j++;								
 			}			
 			else{
