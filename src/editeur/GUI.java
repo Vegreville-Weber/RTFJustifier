@@ -10,6 +10,7 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -66,7 +67,7 @@ public class GUI extends JFrame{
 		setLocationRelativeTo(null); //centrage de la fenêtre sur l'écran
 		setResizable(false); //On interdit la redimensionnement de la fenêtre
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //l'application se ferme lorsqu'on ferme la fenêtre
-		setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png")).getImage()); //On defini l'icone de l'application
+		//setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png")).getImage()); //On defini l'icone de l'application
 	}
 	
 	/**
@@ -202,10 +203,9 @@ public class GUI extends JFrame{
                 		
                 		SwingUtilities.invokeLater(new Runnable(){
                 			public void run(){
-                				Frame[] frames = Frame.getFrames();
-                				for(Frame frame:frames){
-                					System.out.println(frame.getTitle());
-                					if(frame.getTitle().equals("Travail en cours")){
+                				Window[] frames = Frame.getWindows();
+                				for(Window frame:frames){
+                					if(frame.getName().equals("Travail en cours")){
                 						frame.setVisible(false);
                 						break;
                 					}
@@ -232,11 +232,11 @@ public class GUI extends JFrame{
             	    @Override
             	    public void run() {
             	    	JFrame waitingWindow = new JFrame();
-                    	waitingWindow.setSize(300, 100);
+                    	waitingWindow.setSize(300, 120);
                     	waitingWindow.setLocationRelativeTo(null);
                     	waitingWindow.setResizable(true);
                     	waitingWindow.setName("Travail en cours");
-                    	waitingWindow.setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png")).getImage());
+                    	//waitingWindow.setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png")).getImage());
                     	JPanel backPanelWaiting = new JPanel();
                     	backPanelWaiting.setSize(300,120);
                     	backPanelWaiting.setLayout(new BoxLayout(backPanelWaiting, BoxLayout.PAGE_AXIS));
@@ -361,8 +361,7 @@ public class GUI extends JFrame{
 		
 		sliderPenalites.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				Main.penalite=10-sliderPenalites.getValue();	
-				System.out.println(Main.penalite);
+				Main.penalite=10-sliderPenalites.getValue();
 			}
 		});
 		
@@ -409,7 +408,7 @@ public class GUI extends JFrame{
 		
 		
 		reglagesAvances.setContentPane(backPanel2);
-		reglagesAvances.setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png")).getImage());
+		//reglagesAvances.setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png").toExternalForm()).getImage());
 	}
 
 	/**
@@ -421,7 +420,7 @@ public class GUI extends JFrame{
 		informationsUtiles.setSize(500,300);
 		informationsUtiles.setResizable(false);
 		informationsUtiles.setLocationRelativeTo(null);
-		informationsUtiles.setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png")).getImage());
+		//informationsUtiles.setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png")).getImage());
 		JPanel backPanelInfos = new JPanel();
 		backPanelInfos.setBackground(backgroundColor);
 		backPanelInfos.setLayout(new BoxLayout(backPanelInfos, BoxLayout.Y_AXIS));
@@ -431,7 +430,7 @@ public class GUI extends JFrame{
 		display.setContentType("text/rtf; charset=EUC-JP");
 
 	    try {
-	    	BufferedReader br = new BufferedReader(new FileReader(getClass().getResource("Informations.rtf").toString()));
+	    	BufferedReader br = new BufferedReader(new FileReader("Informations.rtf"));
 	        StringBuilder sb = new StringBuilder();
 	        String line = br.readLine();
 	    

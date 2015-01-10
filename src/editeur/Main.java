@@ -3,6 +3,8 @@ package editeur;
 import java.io.IOException;
 import java.util.LinkedList;
 
+import javax.swing.SwingUtilities;
+
 public class Main {
 
 	public static boolean justificationManuelle = false; //justification par ajout d'espaces
@@ -50,8 +52,10 @@ public class Main {
 			
 		}
 		//en l'absence d'arguments on démarre l'interface graphique
+		//On utilise SwingUtilities.invokeLater car tout ce qui fait 
+		//appel à des éléments de Swing devrait l'être fait ainsi
 		else{
-			GUI gui= new GUI();
+			SwingUtilities.invokeLater(new Runnable() {public void run(){GUI gui= new GUI();}});
 		}
 		
 	}
