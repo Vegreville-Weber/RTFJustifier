@@ -239,7 +239,7 @@ public class GUI extends JFrame{
                     	waitingWindow.setName("Travail en cours");
                     	waitingWindow.setIconImage(new ImageIcon(getClass().getResource("images/RTF.png")).getImage());
                     	JPanel backPanelWaiting = new JPanel();
-                    	backPanelWaiting.setSize(300,120);
+                    	//backPanelWaiting.setSize(300,120);
                     	backPanelWaiting.setLayout(new BoxLayout(backPanelWaiting, BoxLayout.PAGE_AXIS));
                     	backPanelWaiting.setBackground(backgroundColor);
                     	backPanelWaiting.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));

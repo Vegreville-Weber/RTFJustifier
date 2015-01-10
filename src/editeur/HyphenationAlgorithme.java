@@ -11,7 +11,7 @@ public class HyphenationAlgorithme {
 
 	private static final double INFINI = Double.MAX_VALUE;
 	private static final String voyelle = "aeiouy";
-	private static final String consomne ="zrtpqsdfghjklmwxcvbn";
+	private static final String consonne ="zrtpqsdfghjklmwxcvbn";
 	
 		/**
 		 * @param paragraphe - Paragraphe à mettre en page EN CONSIDERANT UN SEUL ESPACE ENTRE CHAQUE MOT
@@ -92,7 +92,7 @@ public class HyphenationAlgorithme {
 						double espace = espaces[i][j - 1] - police.largeurMot(" " + left+"-");
 						double cost;
 						if(espace <0 || j==nombreDeMots) cost=INFINI;
-						else cost = espace*espace*espace +12000*Main.penalite;//penalité
+						else cost = espace*espace*espace +100000*Main.penalite;//penalité
 						if(costFinal[i-1]!=INFINI&&cost!=INFINI&&(costFinal[i-1]+cost<costFinal[j])){
 							temp.isHyph=true;
 							temp.left=left;
@@ -225,7 +225,7 @@ public class HyphenationAlgorithme {
 				if(voyelle.contains(c+"")){
 					isVoyelle = true;
 				}
-				else if (consomne.contains(c+"")){
+				else if (consonne.contains(c+"")){
 				
 					if(((!isVoyelle&&!isCutWrong&&Math.abs(i-size/2)>Math.abs(k-size/2))||(isCutWrong&&Math.abs(i-size/2)>Math.abs(k-size/2))||(!isVoyelle&&isCutWrong))&&(k>1&&size-k>1)){
 						i=k;
