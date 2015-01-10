@@ -48,12 +48,8 @@ public class GUI extends JFrame{
 	static JFrame reglagesAvances = null;
 	static JFrame informationsUtiles = null;
 	static Color backgroundColor = new Color(245, 245, 245);
-	static boolean isRunOver;
-	
-	public static void main(String[] args) {
-		GUI gui= new GUI();
-	}
-	
+	static JFrame waitWindow;
+
 	public GUI(){
 		super();
 		
@@ -197,21 +193,13 @@ public class GUI extends JFrame{
                 	public void run(){
                 		try {
         					Main.run(source.getAbsolutePath(), cible.getAbsolutePath());
-        					GUI.isRunOver=true;
         				} catch (IOException e1) {
         					e1.printStackTrace();
         				}
                 		
                 		SwingUtilities.invokeLater(new Runnable(){
                 			public void run(){
-                				Window[] frames = Frame.getWindows();
-                				for(Window frame:frames){
-                					if(frame.getName().equals("Travail en cours")){
-                						frame.setVisible(false);
-                						break;
-                					}
-                						
-                				}
+                				if (GUI.waitWindow!=null) GUI.waitWindow.setVisible(false);
                 			}
                 		});
             	    	
@@ -239,7 +227,7 @@ public class GUI extends JFrame{
                     	waitingWindow.setName("Travail en cours");
                     	waitingWindow.setIconImage(new ImageIcon(getClass().getResource("images/RTF.png")).getImage());
                     	JPanel backPanelWaiting = new JPanel();
-                    	backPanelWaiting.setSize(300,120);
+                    	backPanelWaiting.setMaximumSize(new Dimension(300,120));
                     	backPanelWaiting.setLayout(new BoxLayout(backPanelWaiting, BoxLayout.PAGE_AXIS));
                     	backPanelWaiting.setBackground(backgroundColor);
                     	backPanelWaiting.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -254,8 +242,8 @@ public class GUI extends JFrame{
                     	backPanelWaiting.add(Box.createVerticalGlue());
                     	backPanelWaiting.add(progressBarWaiting);
                     	waitingWindow.setContentPane(backPanelWaiting);
-                    	waitingWindow.repaint();
                     	waitingWindow.setVisible(true);
+                    	GUI.waitWindow = waitingWindow;
             	    }
             	});   
             	
@@ -328,7 +316,7 @@ public class GUI extends JFrame{
 		reglagesAvances.setSize(340, 190);
 		reglagesAvances.setLocationRelativeTo(null);
 		reglagesAvances.setResizable(false);
-		backPanel2.setMinimumSize(reglagesAvances.getSize());
+		backPanel2.setMaximumSize(new Dimension(340,180));
 		backPanel2.setLayout(new BoxLayout(backPanel2, BoxLayout.Y_AXIS));
 		backPanel2.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		JCheckBox boxCoupure = new JCheckBox("Autoriser la coupure de mots");
