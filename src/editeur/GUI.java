@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Hashtable;
 import java.util.regex.Pattern;
 
@@ -67,7 +68,7 @@ public class GUI extends JFrame{
 		setLocationRelativeTo(null); //centrage de la fenêtre sur l'écran
 		setResizable(false); //On interdit la redimensionnement de la fenêtre
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //l'application se ferme lorsqu'on ferme la fenêtre
-		//setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png")).getImage()); //On defini l'icone de l'application
+		setIconImage(new ImageIcon(getClass().getResource("images/RTF.png")).getImage()); //On defini l'icone de l'application
 	}
 	
 	/**
@@ -236,7 +237,7 @@ public class GUI extends JFrame{
                     	waitingWindow.setLocationRelativeTo(null);
                     	waitingWindow.setResizable(true);
                     	waitingWindow.setName("Travail en cours");
-                    	//waitingWindow.setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png")).getImage());
+                    	waitingWindow.setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png")).getImage());
                     	JPanel backPanelWaiting = new JPanel();
                     	backPanelWaiting.setSize(300,120);
                     	backPanelWaiting.setLayout(new BoxLayout(backPanelWaiting, BoxLayout.PAGE_AXIS));
@@ -408,7 +409,7 @@ public class GUI extends JFrame{
 		
 		
 		reglagesAvances.setContentPane(backPanel2);
-		//reglagesAvances.setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png").toExternalForm()).getImage());
+		reglagesAvances.setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png").toExternalForm()).getImage());
 	}
 
 	/**
@@ -420,7 +421,7 @@ public class GUI extends JFrame{
 		informationsUtiles.setSize(500,300);
 		informationsUtiles.setResizable(false);
 		informationsUtiles.setLocationRelativeTo(null);
-		//informationsUtiles.setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png")).getImage());
+		informationsUtiles.setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png")).getImage());
 		JPanel backPanelInfos = new JPanel();
 		backPanelInfos.setBackground(backgroundColor);
 		backPanelInfos.setLayout(new BoxLayout(backPanelInfos, BoxLayout.Y_AXIS));
@@ -430,8 +431,8 @@ public class GUI extends JFrame{
 		display.setContentType("text/rtf; charset=EUC-JP");
 
 	    try {
-	    	BufferedReader br = new BufferedReader(new FileReader("images"+File.separator+"Informations.rtf"));
-	        StringBuilder sb = new StringBuilder();
+	    	BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("Informations.rtf")));
+	        StringBuilder sb = new StringBuilder(); 
 	        String line = br.readLine();
 	    
 	        while (line != null) {
