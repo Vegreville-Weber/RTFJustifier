@@ -237,7 +237,7 @@ public class GUI extends JFrame{
                     	waitingWindow.setLocationRelativeTo(null);
                     	waitingWindow.setResizable(true);
                     	waitingWindow.setName("Travail en cours");
-                    	waitingWindow.setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png")).getImage());
+                    	waitingWindow.setIconImage(new ImageIcon(getClass().getResource("images/RTF.png")).getImage());
                     	JPanel backPanelWaiting = new JPanel();
                     	backPanelWaiting.setSize(300,120);
                     	backPanelWaiting.setLayout(new BoxLayout(backPanelWaiting, BoxLayout.PAGE_AXIS));
@@ -409,7 +409,7 @@ public class GUI extends JFrame{
 		
 		
 		reglagesAvances.setContentPane(backPanel2);
-		reglagesAvances.setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png").toExternalForm()).getImage());
+		reglagesAvances.setIconImage(new ImageIcon(getClass().getResource("images/RTF.png").toExternalForm()).getImage());
 	}
 
 	/**
@@ -421,7 +421,7 @@ public class GUI extends JFrame{
 		informationsUtiles.setSize(500,300);
 		informationsUtiles.setResizable(false);
 		informationsUtiles.setLocationRelativeTo(null);
-		informationsUtiles.setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png")).getImage());
+		informationsUtiles.setIconImage(new ImageIcon(getClass().getResource("images/RTF.png")).getImage());
 		JPanel backPanelInfos = new JPanel();
 		backPanelInfos.setBackground(backgroundColor);
 		backPanelInfos.setLayout(new BoxLayout(backPanelInfos, BoxLayout.Y_AXIS));
