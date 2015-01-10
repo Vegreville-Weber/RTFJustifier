@@ -2,18 +2,16 @@ package editeur;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -37,6 +35,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -47,6 +46,7 @@ public class GUI extends JFrame{
 	static JFrame reglagesAvances = null;
 	static JFrame informationsUtiles = null;
 	static Color backgroundColor = new Color(245, 245, 245);
+	static boolean isRunOver;
 	
 	public static void main(String[] args) {
 		GUI gui= new GUI();
@@ -66,7 +66,7 @@ public class GUI extends JFrame{
 		setLocationRelativeTo(null); //centrage de la fenêtre sur l'écran
 		setResizable(false); //On interdit la redimensionnement de la fenêtre
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //l'application se ferme lorsqu'on ferme la fenêtre
-		setIconImage(new ImageIcon("images"+File.separator+"RTF.png").getImage()); //On defini l'icone de l'application
+		setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png")).getImage()); //On defini l'icone de l'application
 	}
 	
 	/**
@@ -190,15 +190,53 @@ public class GUI extends JFrame{
             		cible = new File(source.getAbsolutePath().replaceAll(".rtf", "-justified.rtf"));
             		setRightPath(labelCible, cible.getAbsolutePath());
             	}
-            	
-            	
-            	Thread wait = new Thread(){
-            		public void run(){
-            			JFrame waitingWindow = new JFrame();
-                    	waitingWindow.setSize(300, 120);
+    	
+                Thread t = new Thread(){
+                	public void run(){
+                		try {
+        					Main.run(source.getAbsolutePath(), cible.getAbsolutePath());
+        					GUI.isRunOver=true;
+        				} catch (IOException e1) {
+        					e1.printStackTrace();
+        				}
+                		
+                		SwingUtilities.invokeLater(new Runnable(){
+                			public void run(){
+                				Frame[] frames = Frame.getFrames();
+                				for(Frame frame:frames){
+                					System.out.println(frame.getTitle());
+                					if(frame.getTitle().equals("Travail en cours")){
+                						frame.setVisible(false);
+                						break;
+                					}
+                						
+                				}
+                			}
+                		});
+            	    	
+            	    	//Ouvre une fenetre pour indiquer la fin du programme et proposer d'ouvrir le RTF
+                    	Object[] options = {"Oui","Non"};
+                    	int choixOuvrir = JOptionPane.showOptionDialog(null,
+                    		 	"Opération terminée!\n Voulez-vous ouvrir le document RTF produit?",
+                    			"Opération terminée",
+                    			JOptionPane.YES_NO_OPTION,
+                    		    JOptionPane.QUESTION_MESSAGE,
+                    		    null,     //do not use a custom Icon
+                    		    options,  //the titles of buttons
+                    		    options[0]); //default button title
+                    	if (choixOuvrir==0) open(cible);
+            	    }
+                };
+                
+            	SwingUtilities.invokeLater(new Runnable() {
+            	    @Override
+            	    public void run() {
+            	    	JFrame waitingWindow = new JFrame();
+                    	waitingWindow.setSize(300, 100);
                     	waitingWindow.setLocationRelativeTo(null);
                     	waitingWindow.setResizable(true);
                     	waitingWindow.setName("Travail en cours");
+                    	waitingWindow.setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png")).getImage());
                     	JPanel backPanelWaiting = new JPanel();
                     	backPanelWaiting.setSize(300,120);
                     	backPanelWaiting.setLayout(new BoxLayout(backPanelWaiting, BoxLayout.PAGE_AXIS));
@@ -217,47 +255,10 @@ public class GUI extends JFrame{
                     	waitingWindow.setContentPane(backPanelWaiting);
                     	waitingWindow.repaint();
                     	waitingWindow.setVisible(true);
-                    	//Thread.sleep(100);
-            		}
-            	};
+            	    }
+            	});   
             	
-            	Thread t = new Thread(){
-            		public void run(){
-            			try {
-        					Main.run(source.getAbsolutePath(), cible.getAbsolutePath());
-        				} catch (IOException e1) {
-        					e1.printStackTrace();
-        				}
-            		}
-            	};
-            	//wait.start();
             	t.start();
-            	
-            	while(t.isAlive()){
-            		try {
-    					Thread.sleep(500);
-    				} catch (InterruptedException e2) {
-    					// TODO Auto-generated catch block
-    					e2.printStackTrace();
-    				}
-            	}
-            	
-            	
-            	
-            	
-            	//Ouvre une fenetre pour indiquer la fin du programme et proposer d'ouvrir le RTF
-            	Object[] options = {"Oui","Non"};
-            	int choixOuvrir = JOptionPane.showOptionDialog(null,
-            		 	"Opération terminée!\n Voulez-vous ouvrir le document RTF produit?",
-            			"Opération terminée",
-            			JOptionPane.YES_NO_OPTION,
-            		    JOptionPane.QUESTION_MESSAGE,
-            		    null,     //do not use a custom Icon
-            		    options,  //the titles of buttons
-            		    options[0]); //default button title
-            	if (choixOuvrir==0) open(cible);
-            	
-            	
             }
         });
 		c.insets = new Insets(40, 0, 0, 0);
@@ -408,6 +409,7 @@ public class GUI extends JFrame{
 		
 		
 		reglagesAvances.setContentPane(backPanel2);
+		reglagesAvances.setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png")).getImage());
 	}
 
 	/**
@@ -419,6 +421,7 @@ public class GUI extends JFrame{
 		informationsUtiles.setSize(500,300);
 		informationsUtiles.setResizable(false);
 		informationsUtiles.setLocationRelativeTo(null);
+		informationsUtiles.setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png")).getImage());
 		JPanel backPanelInfos = new JPanel();
 		backPanelInfos.setBackground(backgroundColor);
 		backPanelInfos.setLayout(new BoxLayout(backPanelInfos, BoxLayout.Y_AXIS));
@@ -428,7 +431,7 @@ public class GUI extends JFrame{
 		display.setContentType("text/rtf; charset=EUC-JP");
 
 	    try {
-	    	BufferedReader br = new BufferedReader(new FileReader("Informations.rtf"));
+	    	BufferedReader br = new BufferedReader(new FileReader(getClass().getResource("Informations.rtf").toString()));
 	        StringBuilder sb = new StringBuilder();
 	        String line = br.readLine();
 	    
@@ -489,39 +492,5 @@ public class GUI extends JFrame{
  		   alreadyCut=true;
  		   
  	   }
-	}
-	
-	private class WaitingThread extends Thread{
-		JFrame waitingWindow;
-		public void run(){
-			waitingWindow = new JFrame();
-        	waitingWindow.setSize(300, 120);
-        	waitingWindow.setLocationRelativeTo(null);
-        	waitingWindow.setResizable(true);
-        	waitingWindow.setName("Travail en cours");
-        	JPanel backPanelWaiting = new JPanel();
-        	backPanelWaiting.setSize(300,120);
-        	backPanelWaiting.setLayout(new BoxLayout(backPanelWaiting, BoxLayout.PAGE_AXIS));
-        	backPanelWaiting.setBackground(backgroundColor);
-        	backPanelWaiting.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        	JLabel labelWaiting = new JLabel("<html><center>Votre fichier est en cours de préparation.</br>Veuillez patientez...</center></html>");
-        	labelWaiting.setOpaque(false);
-    		backPanelWaiting.setVisible(true);
-        		
-        	JProgressBar progressBarWaiting = new JProgressBar(0,100);
-        	progressBarWaiting.setOpaque(false);
-        	progressBarWaiting.setIndeterminate(true);
-        	backPanelWaiting.add(labelWaiting);
-        	backPanelWaiting.add(Box.createVerticalGlue());
-        	backPanelWaiting.add(progressBarWaiting);
-        	waitingWindow.setContentPane(backPanelWaiting);
-        	waitingWindow.repaint();
-        	waitingWindow.setVisible(true);
-		}
-		
-		public void setVisible(boolean b){
-			waitingWindow.setVisible(b);
-		}
-		
 	}
 }
