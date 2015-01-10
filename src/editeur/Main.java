@@ -8,6 +8,7 @@ public class Main {
 	public static boolean justificationManuelle = false; //justification par ajout d'espaces
 	public static boolean justificationLogicielle = true; //demande au logiciel de justifier les lignes
 	public static boolean coupureMots= true; //autorise la coupure de mots (l'hyphenation) ou pas
+	public static int penalite = 1; //permet de doser la penalité infliger pour l'utilisation de coupures de mots
 	
 	public static void main(String[] args) {
 		//Si le logiciel est executé en ligne de commande
@@ -30,6 +31,10 @@ public class Main {
 				else if(args[i].equals("-cw")) coupureMots=true;
 				else if(args[i].startsWith("source=")) source=args[i].substring(7);
 				else if(args[i].startsWith("dest=")) dest=args[i].substring(5);
+				else if(args[i].startsWith("-p=")) {
+					penalite=Integer.parseInt(args[i].substring(3));
+					if (penalite>10) throw new Error("La penalité doit être comprise entre 0 et 10 inclus");
+				}
 			}
 			
 			//Si le fichier source n'est pas spécifié
