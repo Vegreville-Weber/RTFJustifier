@@ -3,12 +3,14 @@ package editeur;
 import java.io.IOException;
 import java.util.LinkedList;
 
+import javax.swing.SwingUtilities;
+
 public class Main {
 
 	public static boolean justificationManuelle = false; //justification par ajout d'espaces
 	public static boolean justificationLogicielle = true; //demande au logiciel de justifier les lignes
 	public static boolean coupureMots= true; //autorise la coupure de mots (l'hyphenation) ou pas
-	public static int penalite = 1; //permet de doser la penalité infliger pour l'utilisation de coupures de mots
+	public static int penalite = 5; //permet de doser la penalité infliger pour l'utilisation de coupures de mots
 	
 	public static void main(String[] args) {
 		//Si le logiciel est executé en ligne de commande
@@ -50,8 +52,10 @@ public class Main {
 			
 		}
 		//en l'absence d'arguments on démarre l'interface graphique
+		//On utilise SwingUtilities.invokeLater car tout ce qui fait 
+		//appel à des éléments de Swing devrait l'être fait ainsi
 		else{
-			GUI gui= new GUI();
+			SwingUtilities.invokeLater(new Runnable() {public void run(){GUI gui= new GUI();}});
 		}
 		
 	}

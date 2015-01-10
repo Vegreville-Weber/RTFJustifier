@@ -92,8 +92,8 @@ public class HyphenationAlgorithme {
 						double espace = espaces[i][j - 1] - police.largeurMot(" " + left+"-");
 						double cost;
 						if(espace <0 || j==nombreDeMots) cost=INFINI;
-						else cost = espace*espace*espace +10000*Main.penalite;//penalité de césure
-						if(costFinal[i-1]!=INFINI&&cost!=INFINI&&(costFinal[i-1]+cost<costFinal[j])){ //Le mot doit être coupé.
+						else cost = espace*espace*espace +12000*Main.penalite;//penalité
+						if(costFinal[i-1]!=INFINI&&cost!=INFINI&&(costFinal[i-1]+cost<costFinal[j])){
 							temp.isHyph=true;
 							temp.left=left;
 							temp.right=right;

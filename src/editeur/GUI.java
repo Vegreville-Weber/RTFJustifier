@@ -6,15 +6,18 @@ import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Hashtable;
 import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
@@ -29,8 +32,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
+import javax.swing.JSlider;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
  
 public class GUI extends JFrame{
@@ -39,6 +47,7 @@ public class GUI extends JFrame{
 	static JFrame reglagesAvances = null;
 	static JFrame informationsUtiles = null;
 	static Color backgroundColor = new Color(245, 245, 245);
+	static boolean isRunOver;
 	
 	public static void main(String[] args) {
 		GUI gui= new GUI();
@@ -58,7 +67,7 @@ public class GUI extends JFrame{
 		setLocationRelativeTo(null); //centrage de la fenêtre sur l'écran
 		setResizable(false); //On interdit la redimensionnement de la fenêtre
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //l'application se ferme lorsqu'on ferme la fenêtre
-		setIconImage(new ImageIcon("images"+File.separator+"RTF.png").getImage()); //On defini l'icone de l'application
+		//setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png")).getImage()); //On defini l'icone de l'application
 	}
 	
 	/**
@@ -182,26 +191,74 @@ public class GUI extends JFrame{
             		cible = new File(source.getAbsolutePath().replaceAll(".rtf", "-justified.rtf"));
             		setRightPath(labelCible, cible.getAbsolutePath());
             	}
- 
-            	try {
-					Main.run(source.getAbsolutePath(), cible.getAbsolutePath());
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+    	
+                Thread t = new Thread(){
+                	public void run(){
+                		try {
+        					Main.run(source.getAbsolutePath(), cible.getAbsolutePath());
+        					GUI.isRunOver=true;
+        				} catch (IOException e1) {
+        					e1.printStackTrace();
+        				}
+                		
+                		SwingUtilities.invokeLater(new Runnable(){
+                			public void run(){
+                				Window[] frames = Frame.getWindows();
+                				for(Window frame:frames){
+                					if(frame.getName().equals("Travail en cours")){
+                						frame.setVisible(false);
+                						break;
+                					}
+                						
+                				}
+                			}
+                		});
+            	    	
+            	    	//Ouvre une fenetre pour indiquer la fin du programme et proposer d'ouvrir le RTF
+                    	Object[] options = {"Oui","Non"};
+                    	int choixOuvrir = JOptionPane.showOptionDialog(null,
+                    		 	"Opération terminée!\n Voulez-vous ouvrir le document RTF produit?",
+                    			"Opération terminée",
+                    			JOptionPane.YES_NO_OPTION,
+                    		    JOptionPane.QUESTION_MESSAGE,
+                    		    null,     //do not use a custom Icon
+                    		    options,  //the titles of buttons
+                    		    options[0]); //default button title
+                    	if (choixOuvrir==0) open(cible);
+            	    }
+                };
+                
+            	SwingUtilities.invokeLater(new Runnable() {
+            	    @Override
+            	    public void run() {
+            	    	JFrame waitingWindow = new JFrame();
+                    	waitingWindow.setSize(300, 120);
+                    	waitingWindow.setLocationRelativeTo(null);
+                    	waitingWindow.setResizable(true);
+                    	waitingWindow.setName("Travail en cours");
+                    	//waitingWindow.setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png")).getImage());
+                    	JPanel backPanelWaiting = new JPanel();
+                    	backPanelWaiting.setSize(300,120);
+                    	backPanelWaiting.setLayout(new BoxLayout(backPanelWaiting, BoxLayout.PAGE_AXIS));
+                    	backPanelWaiting.setBackground(backgroundColor);
+                    	backPanelWaiting.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+                    	JLabel labelWaiting = new JLabel("<html><center>Votre fichier est en cours de préparation.</br>Veuillez patientez...</center></html>");
+                    	labelWaiting.setOpaque(false);
+                		backPanelWaiting.setVisible(true);
+                    		
+                    	JProgressBar progressBarWaiting = new JProgressBar(0,100);
+                    	progressBarWaiting.setOpaque(false);
+                    	progressBarWaiting.setIndeterminate(true);
+                    	backPanelWaiting.add(labelWaiting);
+                    	backPanelWaiting.add(Box.createVerticalGlue());
+                    	backPanelWaiting.add(progressBarWaiting);
+                    	waitingWindow.setContentPane(backPanelWaiting);
+                    	waitingWindow.repaint();
+                    	waitingWindow.setVisible(true);
+            	    }
+            	});   
             	
-            	//Ouvre une fenetre pour indiquer la fin du programme et proposer d'ouvrir le RTF
-            	Object[] options = {"Oui","Non"};
-            	int choixOuvrir = JOptionPane.showOptionDialog(null,
-            		 	"Opération terminée!\n Voulez-vous ouvrir le document RTF produit?",
-            			"Opération terminée",
-            			JOptionPane.YES_NO_OPTION,
-            		    JOptionPane.QUESTION_MESSAGE,
-            		    null,     //do not use a custom Icon
-            		    options,  //the titles of buttons
-            		    options[0]); //default button title
-            	if (choixOuvrir==0) open(cible);
-            	
-            	
+            	t.start();
             }
         });
 		c.insets = new Insets(40, 0, 0, 0);
@@ -267,7 +324,7 @@ public class GUI extends JFrame{
 		JPanel backPanel2 = new JPanel();
 		backPanel2.setBackground(backgroundColor);
 		reglagesAvances.setTitle("Réglages Avancés");
-		reglagesAvances.setSize(300, 130);
+		reglagesAvances.setSize(340, 190);
 		reglagesAvances.setLocationRelativeTo(null);
 		reglagesAvances.setResizable(false);
 		backPanel2.setMinimumSize(reglagesAvances.getSize());
@@ -276,13 +333,38 @@ public class GUI extends JFrame{
 		JCheckBox boxCoupure = new JCheckBox("Autoriser la coupure de mots");
 		boxCoupure.setSelected(Main.coupureMots);
 		boxCoupure.setOpaque(false);
+		
+		final JSlider sliderPenalites = new JSlider(JSlider.HORIZONTAL, 0, 10,10-Main.penalite);
+		if (!boxCoupure.isSelected()) sliderPenalites.setEnabled(false);
+		sliderPenalites.setPreferredSize(new Dimension(280, 60));
+		sliderPenalites.setMaximumSize(new Dimension(280,60));
+		sliderPenalites.setMinorTickSpacing(1);
+		sliderPenalites.setMajorTickSpacing(5);
+		sliderPenalites.setPaintLabels(true);
+		sliderPenalites.setPaintTicks(true);
+		sliderPenalites.setOpaque(false);
+
+		//Create the label table
+		Hashtable<Integer, JLabel> sliderLabelTable = new Hashtable<Integer, JLabel>();
+		sliderLabelTable.put(10, new JLabel("<html><center>Nombreuses<br>césures</center></html>") );
+		sliderLabelTable.put(0, new JLabel("<html><center>Aucune<br>césure</center></html>") );
+		sliderLabelTable.put(5, new JLabel("<html><center>Césures<br>modérées</center></html>") );
+		sliderPenalites.setLabelTable( sliderLabelTable );
+
+		
 		boxCoupure.addActionListener(new ActionListener() {
-			
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				Main.coupureMots = !Main.coupureMots;
+				sliderPenalites.setEnabled(Main.coupureMots);
 			}
 		});
+		
+		sliderPenalites.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				Main.penalite=10-sliderPenalites.getValue();
+			}
+		});
+		
 		final JCheckBox boxJustificationManuelle = new JCheckBox("Justifier en ajoutant des espaces");
 		boxJustificationManuelle.setSelected(Main.justificationManuelle);
 		boxJustificationManuelle.setOpaque(false);
@@ -312,14 +394,21 @@ public class GUI extends JFrame{
 			}
 		});
 		
-		
-		
+		JPanel panelSlider = new JPanel();
+		panelSlider.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		panelSlider.add(sliderPenalites);
+		panelSlider.setSize(new Dimension(250,50));
+		panelSlider.setOpaque(false);
+
 		backPanel2.add(boxCoupure);
+		backPanel2.add(panelSlider);
 		backPanel2.add(boxJustificationManuelle);
 		backPanel2.add(boxJustificationLogicielle);
 		
 		
+		
 		reglagesAvances.setContentPane(backPanel2);
+		//reglagesAvances.setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png").toExternalForm()).getImage());
 	}
 
 	/**
@@ -331,6 +420,7 @@ public class GUI extends JFrame{
 		informationsUtiles.setSize(500,300);
 		informationsUtiles.setResizable(false);
 		informationsUtiles.setLocationRelativeTo(null);
+		//informationsUtiles.setIconImage(new ImageIcon(getClass().getResource("images"+File.separator+"RTF.png")).getImage());
 		JPanel backPanelInfos = new JPanel();
 		backPanelInfos.setBackground(backgroundColor);
 		backPanelInfos.setLayout(new BoxLayout(backPanelInfos, BoxLayout.Y_AXIS));
