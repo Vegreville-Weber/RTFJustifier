@@ -340,7 +340,7 @@ public class GUI extends JFrame{
 		display.setContentType("text/rtf; charset=EUC-JP");
 
 	    try {
-	    	BufferedReader br = new BufferedReader(new FileReader("Informations.rtf"));
+	    	BufferedReader br = new BufferedReader(new FileReader("images"+File.separator+"Informations.rtf"));
 	        StringBuilder sb = new StringBuilder();
 	        String line = br.readLine();
 	    

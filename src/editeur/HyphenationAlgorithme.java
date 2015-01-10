@@ -25,8 +25,8 @@ public class HyphenationAlgorithme {
 			if(paragraphe.isEmpty()) return " ";
 			String[] chaine = OptimisationAlgorithme.chainesdeMots(paragraphe); //chaine[k] : k-ieme mot du paragraphe
 			Mots init = new Mots(chaine[0],1);
-			Mots temprun = init;
-			for(int k = 1; k<chaine.length;k++){
+			Mots temprun = init; 
+			for(int k = 1; k<chaine.length;k++){ //on construit la liste de mots
 				Mots temp = new Mots(chaine[k],k+1);
 				temprun.setNext(temp);
 				temprun = temp;
@@ -68,13 +68,13 @@ public class HyphenationAlgorithme {
 			}
 			
 			costFinal[0] = 0;
-			Mots temp = init;
+			Mots temp = init; 
 			for (int j = 1; j <= nombreDeMots; j++) {
 				costFinal[j] = INFINI;
-				boolean isCutable = false;
+				boolean isCutable = false; 
 				String left ="",right="",content ="";
-				if(temp.cut!=-1){
-					int cut = temp.cut;
+				if(temp.cut!=-1){ //si le mot peut être coupé
+					int cut = temp.cut; //position optimale pour couper le mot
 					content = temp.content;
 					int size = content.length();
 					left = content.substring(0,cut);
@@ -92,8 +92,8 @@ public class HyphenationAlgorithme {
 						double espace = espaces[i][j - 1] - police.largeurMot(" " + left+"-");
 						double cost;
 						if(espace <0 || j==nombreDeMots) cost=INFINI;
-						else cost = espace*espace*espace +10000*Main.penalite;//penalité
-						if(costFinal[i-1]!=INFINI&&cost!=INFINI&&(costFinal[i-1]+cost<costFinal[j])){
+						else cost = espace*espace*espace +10000*Main.penalite;//penalité de césure
+						if(costFinal[i-1]!=INFINI&&cost!=INFINI&&(costFinal[i-1]+cost<costFinal[j])){ //Le mot doit être coupé.
 							temp.isHyph=true;
 							temp.left=left;
 							temp.right=right;
@@ -120,6 +120,8 @@ public class HyphenationAlgorithme {
 				}
 				temp = temp.next;
 			}
+			
+			//on reconstruit le paragraphe final
 			double blank = police.largeurMot(" ");
 			String restemp = new String();
 			Mots run = init;
