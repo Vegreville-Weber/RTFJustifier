@@ -19,8 +19,7 @@ public class RTFWriter { //une fois connues grâce à RTFReader les caractéristiqu
 		try {
 			temp = new FileWriter(destination);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new Error("Erreur d'ouverture de fichier. Veuillez vérifier que le fichier source n'est pas déjà ouvert.");
 		}		
 		Rtf output = Rtf.rtf();
 		
