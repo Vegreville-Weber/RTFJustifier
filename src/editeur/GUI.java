@@ -435,7 +435,7 @@ public class GUI extends JFrame{
 	 * Définit l'action associée au bouton "Choisir le fichier source"
 	 * @return un ActionListener représentant cette action
 	 */
-	private static ActionListener actionBoutonSource(JLabel labelSource, JLabel labelCible){
+	private static ActionListener actionBoutonSource(final JLabel labelSource, final JLabel labelCible){
 		ActionListener action = new ActionListener() {
 			 
             public void actionPerformed(ActionEvent e)
@@ -465,7 +465,7 @@ public class GUI extends JFrame{
 	 * Définit l'action associée au bouton "Choisir le fichier cible"
 	 * @return un ActionListener représentant cette action
 	 */
-	private static ActionListener actionBoutonCible(JLabel labelCible){
+	private static ActionListener actionBoutonCible(final JLabel labelCible){
 		ActionListener action = new ActionListener() {
 			 
             public void actionPerformed(ActionEvent e)
@@ -490,7 +490,7 @@ public class GUI extends JFrame{
 	 * Définit l'action associée au bouton "Justifier"
 	 * @return un ActionListener représentant cette action
 	 */
-	private static ActionListener actionBoutonJustifier(JLabel labelCible){
+	private static ActionListener actionBoutonJustifier(final JLabel labelCible){
 		ActionListener action = new ActionListener() {
 			 
             public void actionPerformed(ActionEvent e)
