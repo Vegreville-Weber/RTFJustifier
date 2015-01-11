@@ -225,7 +225,7 @@ public class GUI extends JFrame{
 		//On initialise la fenêtre
 		reglagesAvances = new JFrame();
 		reglagesAvances.setTitle("Réglages Avancés");
-		reglagesAvances.setSize(340, 190);
+		reglagesAvances.setSize(320, 210);
 		reglagesAvances.setLocationRelativeTo(null);
 		reglagesAvances.setResizable(false);
 		reglagesAvances.setIconImage(new ImageIcon(getClass().getResource("images/RTF.png")).getImage());
@@ -233,7 +233,7 @@ public class GUI extends JFrame{
 		//On initialise le JPanel de fond de la fenêtre
 		JPanel backPanel2 = new JPanel();
 		backPanel2.setBackground(backgroundColor);
-		backPanel2.setMaximumSize(new Dimension(340,180));
+		backPanel2.setMaximumSize(new Dimension(340,190));
 		backPanel2.setLayout(new BoxLayout(backPanel2, BoxLayout.Y_AXIS));
 		backPanel2.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		
