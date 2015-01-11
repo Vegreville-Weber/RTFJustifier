@@ -37,9 +37,9 @@ public class OptimisationAlgorithme {
 	
 		
 		for (int i = 1; i <= nombreDeMots; i++) { //on remplit le tableau espaces.
-			espaces[i][i] = largeurBloc - police.largeurMot(chaine[i-1]); //ligne ne comportant que le i-eme mot
+			espaces[i][i] = (largeurBloc - police.largeurMot(chaine[i-1]))*0.3527; //ligne ne comportant que le i-eme mot
 			for (int j = i + 1; j <= nombreDeMots; j++) {
-				espaces[i][j] = espaces[i][j - 1] - police.largeurMot(" " + chaine[j-1]);
+				espaces[i][j] = espaces[i][j - 1] - (police.largeurMot(" " + chaine[j-1])*0.3527);
 			}
 		}
 

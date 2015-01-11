@@ -55,8 +55,8 @@ public class RTFReader { //classe utilisée pour retenir toutes les informations 
 						Font f;
 						if(currentfontnum==-1) f = new Font("Liberation Serif",Font.PLAIN,(int) currentfontsize);
 						else f = new Font(this.fontnames.get(currentfontnum),Font.PLAIN,(int) currentfontsize);
-						this.paragraphes.add(new Paragraphe(currentParagraph,f,currentfontnum)); //on rajoute le paragraphe ï¿½ la liste paragraphes.
-						currentfontsize=12;  // on remet ï¿½ zï¿½ro les variables currentfontsize,currentfontnum,currentParagraph et onParagraph
+						this.paragraphes.add(new Paragraphe(currentParagraph,f,currentfontnum)); //on rajoute le paragraphe à la liste paragraphes.
+						currentfontsize=12;  // on remet à zero les variables currentfontsize,currentfontnum,currentParagraph et onParagraph
 						currentfontnum=-1;
 						currentParagraph="";
 						onParagraph=false;
@@ -65,16 +65,16 @@ public class RTFReader { //classe utilisée pour retenir toutes les informations 
 						currentParagraph+=line;
 					}
 				}
-				if(line.contains("{\\fonttbl")){ //cas oï¿½ on est en train de lire la ligne qui dï¿½clare toutes les polices.
+				if(line.contains("{\\fonttbl")){ //cas où on est en train de lire la ligne qui déclare toutes les polices.
 					this.searchFonts(line); //fonction traitant la ligne pour y trouver le nom et les indices des polices
 				}
-				if(line.contains("\\paper")){ //cas oï¿½ on est en train de lire la ligne qui dï¿½clare les dimensions.
+				if(line.contains("\\paper")){ //cas où on est en train de lire la ligne qui déclare les dimensions.
 					this.searchSize(line); //fonction traitant la ligne pour y trouver la largeur et la hauteur de la page
 				}
-				if(line.contains("\\marg")){ //cas oï¿½ on est en train de lire la ligne qui dï¿½clare toutes les marges.
+				if(line.contains("\\marg")){ //cas où on est en train de lire la ligne qui déclare toutes les marges.
 					this.searchMargins(line); //fonction traitant la ligne pour y trouver les marges utilsiï¿½es
 				}
-				if(line.contains("\\pard")){ ////cas où on est en train de lire la ligne qui dï¿½clare un nouveau paragraphe
+				if(line.contains("\\pard")){ ////cas où on est en train de lire la ligne qui déclare un nouveau paragraphe
 					String[] lines= line.split("ltrch");
 					String info[] = lines[lines.length-1].split("loch");
 					if(info.length>1){
@@ -90,10 +90,10 @@ public class RTFReader { //classe utilisée pour retenir toutes les informations 
 							}
 							boolean isNextInteger =true;
 
-							try{//permet de voir si une police a ï¿½tï¿½ dï¿½clarï¿½e pour ce paragraphe.
+							try{//permet de voir si une police a été déclarée pour ce paragraphe.
 								Integer.parseInt(Character.toString(info[k].charAt(2)));
 							}
-							catch (NumberFormatException | StringIndexOutOfBoundsException nfe  ) { //I add the stringindexoutofboundsexception to deal with the case where there are multiple /loch and no /fs (between the two loch)
+							catch (NumberFormatException | StringIndexOutOfBoundsException nfe  ) { 
 						        isNextInteger=false;
 						    }
 			
@@ -102,7 +102,7 @@ public class RTFReader { //classe utilisée pour retenir toutes les informations 
 							}
 						}
 					}
-					onParagraph=true; //la balise \\pard dï¿½clare un nouveau paragraphe donc les prochaines lignes feront partie du paragraphe.
+					onParagraph=true; //la balise \\pard déclare un nouveau paragraphe donc les prochaines lignes feront partie du paragraphe.
 				}
 				
 			}
@@ -114,7 +114,7 @@ public class RTFReader { //classe utilisée pour retenir toutes les informations 
 			}
 	}
 	
-	public void searchFonts(String line){ //traite la ligne line pour y trouver toutes les polices dï¿½clarï¿½es
+	public void searchFonts(String line){ //traite la ligne line pour y trouver toutes les polices déclarées
 		String font = new String(line.substring(9));
 		String[] temp = font.split("\\{");
 		for(int k=1;k<temp.length;k++){

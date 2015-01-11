@@ -1,9 +1,5 @@
 package editeur;
 
-import java.awt.Font;
-import java.awt.font.TextLayout;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 
@@ -50,9 +46,9 @@ public class HyphenationAlgorithme {
 			
 			
 			for (int i = 1; i <= nombreDeMots; i++) { //on remplit le tableau espaces.
-				espaces[i][i] = largeurBloc - police.largeurMot(chaine[i-1]); //ligne ne comportant que le i-eme mot
+				espaces[i][i] = (largeurBloc - police.largeurMot(chaine[i-1]))*0.03527; //ligne ne comportant que le i-eme mot
 				for (int j = i + 1; j <= nombreDeMots; j++) {
-					espaces[i][j] = espaces[i][j - 1] - police.largeurMot(" " + chaine[j-1]);
+					espaces[i][j] = espaces[i][j - 1] - police.largeurMot(" " + chaine[j-1])*0.03527;
 				}
 			}
 
@@ -62,8 +58,9 @@ public class HyphenationAlgorithme {
 						costs[i][j] = INFINI;
 					else if (j == nombreDeMots && espaces[i][j] >= 0) //on ne prend pas en compte la dernière ligne.
 						costs[i][j] = 0;
-					else
+					else{
 						costs[i][j] = espaces[i][j] * espaces[i][j] * espaces[i][j];
+						}
 				}
 			}
 			
@@ -89,29 +86,33 @@ public class HyphenationAlgorithme {
 					}
 					
 					if(isCutable){
-						double espace = espaces[i][j - 1] - police.largeurMot(" " + left+"-");
+						double espace = espaces[i][j - 1] - police.largeurMot(" " + left+"-")*0.03527;
 						double cost;
 						if(espace <0 || j==nombreDeMots) cost=INFINI;
-						else cost = espace*espace*espace +100000*Main.penalite;//penalité
+						else {
+							cost = espace*espace*espace +Main.penalite ;//penalité
+						}
 						if(costFinal[i-1]!=INFINI&&cost!=INFINI&&(costFinal[i-1]+cost<costFinal[j])){
-							temp.isHyph=true;
-							temp.left=left;
-							temp.right=right;
-							costFinal[j] = costFinal[i-1] +cost;
-							espaces[j+1][j+1] = espaces[j+1][j+1]- police.largeurMot(right);
-							for (int k = j + 2; k <= nombreDeMots; k++) {
-								espaces[j+1][k] = espaces[j+1][k - 1] - police.largeurMot(" " + chaine[k-1]);
-							}
-							p[j] = i;
-							for (int s = 1; s <= nombreDeMots; s++) { //on remplit le tableau costs.
-								for (int t = s; t <= nombreDeMots; t++) {
-									if (espaces[s][t] < 0)
-										costs[s][t] = INFINI;
-									else if (t == nombreDeMots && espaces[s][t] >= 0) //on ne prend pas en compte la dernière ligne.
-										costs[s][t] = 0;
-									else
-										costs[s][t] = espaces[s][t] * espaces[s][t] * espaces[s][t];
+							if(!temp.isEnd||(temp.isEnd&&costFinal[j]>cost+costFinal[i-1])){
+								temp.isHyph=true;
+								temp.left=left;
+								temp.right=right;							
+								costFinal[j] = costFinal[i-1] +cost;
+								espaces[j+1][j+1] = espaces[j+1][j+1]- police.largeurMot(right)*0.03527;
+								for (int k = j + 2; k <= nombreDeMots; k++) {
+									espaces[j+1][k] = espaces[j+1][k - 1] - police.largeurMot(" " + chaine[k-1])*0.03527;
 								}
+								p[j] = i;
+								for (int s = 1; s <= nombreDeMots; s++) { //on remplit le tableau costs.
+									for (int t = s; t <= nombreDeMots; t++) {
+										if (espaces[s][t] < 0)
+											costs[s][t] = INFINI;
+										else if (t == nombreDeMots && espaces[s][t] >= 0) //on ne prend pas en compte la dernière ligne.
+											costs[s][t] = 0;
+										else
+											costs[s][t] = espaces[s][t] * espaces[s][t] * espaces[s][t];
+								}
+							}
 							}
 						}
 						

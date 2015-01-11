@@ -80,7 +80,7 @@ public class Main {
 			// au plus petit caractère de chaque police, et qui suffit à se 
 			// prémunir des erreurs d'évaluation.
 			Polices pol = new Polices(p.font);
-			if(Main.coupureMots)
+			if(Main.coupureMots&&Main.penalite!=10)
 				newpara = HyphenationAlgorithme.niceParagraph(pol, p.texte, largeurBloc-securite);
 			else
 				newpara = OptimisationAlgorithme.niceParagraph(pol, p.texte, largeurBloc-securite);	
