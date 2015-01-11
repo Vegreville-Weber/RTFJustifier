@@ -5,9 +5,8 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.util.HashMap;
 
-/*	La classe Polices sert à encapsuler une Font et à y ajouter une Hashmap largeur
- *  qui renvoie pour tout les caractères présents dans str leur largeur respectives * 
- * 
+/*	La classe Polices sert à encapsuler une Font et à calculer 
+ * 	la taille d'une chaine de caractère avec celle-ci.
  */
 public class Polices{
 
