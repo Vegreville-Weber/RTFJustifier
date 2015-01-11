@@ -55,7 +55,7 @@ public class Main {
 		//On utilise SwingUtilities.invokeLater car tout ce qui fait 
 		//appel à des éléments de Swing devrait l'être fait ainsi
 		else{
-			SwingUtilities.invokeLater(new Runnable() {public void run(){GUI gui= new GUI();}});
+			SwingUtilities.invokeLater(new Runnable() {public void run(){new GUI();}});
 		}
 		
 	}
